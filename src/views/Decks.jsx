@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
 
-const Deck = () => {
+const Deck = ({...props}) => {
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
   const [toDeck, setToDeck] = useState({go:false,id:null});
@@ -30,7 +29,6 @@ const Deck = () => {
     try {
       const res = await fetch('/api/decks?type=all');
       const decksInfo = await res.json()
-      console.log(decksInfo)
       setDecksInfo(decksInfo);
     } catch (error) {
       console.error(error);
@@ -39,7 +37,7 @@ const Deck = () => {
 
   return (
     <div className="container mt-5">
-        {toDeck.go ? <Redirect to={"/decklist?id="+toDeck.id}/> : null}
+        {toDeck.go ? <div onClick={props.openDecklist(toDeck.id)}/> : null}
         {display}
     </div>
   );

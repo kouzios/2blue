@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 
-const Deck = () => {
+const Deck = ({...props}) => {
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
   const [display, setDisplay] = useState("<div/>");
 
   useEffect(() => {
     loadDecks();
-  }, []);
+    //eslint-disable-next-line
+  }, [props.id]);
 
   useEffect(() => {
       formatDecks();
@@ -28,8 +29,8 @@ const Deck = () => {
 
   const loadDecks = async () => { 
     try {
-      const params = (new URL(document.location)).searchParams;
-      const res = await fetch('/api/decks?type=one&id=' + params.get("id"));
+      console.log(props)
+      const res = await fetch('/api/decks?type=one&id=' + props.id);
       const decksInfo = await res.json();
       setDecksInfo(decksInfo);
     } catch (error) {

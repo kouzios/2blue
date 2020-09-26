@@ -1,34 +1,39 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-} from "react-router-dom";
-
+import React, {useState, useEffect} from "react";
 import Decks from './views/Decks';
 import Decklist from './views/Decklist';
+import Home from './views/Home';
 import './App.css';
 
-export default function App() {
+const App = () => {
+  const [view, setView] = useState("home");
+  const [deckID, setDeckID] = useState(null);
+
+  useEffect(() => {
+    redirect();
+    //eslint-disable-next-line
+  }, [view]);
+
+  const openDecklist = (id) => {
+    setDeckID(id);
+    setView("decklist");
+  }
+
+  const redirect = () => {
+    switch (view) {
+      case "home": return <Home setView={setView}/>;
+      case "decks": return <Decks openDecklist={openDecklist}/>;
+      case "decklist": return <Decklist id={deckID} setView={setView}/>;
+      default: return <Home/>;
+    }
+  }
+
   return (
-    <Router>
-      <Switch>
-          <Route path="/decks">
-            <Decks />
-            <Link to="/">Go back?</Link>
-          </Route>
-          <Route path="/decklist">
-            <Decklist/>
-            <Link to="/decks">Go back?</Link>
-          </Route>
-          <Route path="/">
-            <Link to="/decks">Go to decks?</Link>
-          </Route>
-          <Route path="*">
-            <div>Bad Route</div>
-          </Route>
-        </Switch>
-    </Router>
+    <div>
+      {redirect()}
+      <hr/>
+      <div className="clickable" onClick={() => setView("home")}> Go Home </div>
+    </div>
   );
 }
+
+export default App;
