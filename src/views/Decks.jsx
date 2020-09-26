@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {Redirect} from 'react-router-dom';
 
 const Deck = () => {
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
+  const [toDeck, setToDeck] = useState({go:false,id:null});
 
   useEffect(() => {
     loadDecks();
@@ -10,24 +12,23 @@ const Deck = () => {
 
   useEffect(() => {
       formatDecks();
+      //eslint-disable-next-line
   }, [decksInfo]);
 
   const formatDecks = () => {
-    let deck = [];
-    if(decksInfo.length > 0) {
-        deck = JSON.parse(decksInfo[0].cards);
-        let mapped = deck.map((card, index) => (
-            <div>
-                {card.count}x {card.name}
+      if(decksInfo.length > 0) {
+        let mapped = decksInfo.map((deck, index) => (
+            <div onClick={() => setToDeck({go:true,id:deck.id})} key={"deck"+index} id={deck.id} className="clickable">
+                {deck.name}
             </div>
         ));
         setDisplay(mapped);
-    }
+      }
   }
 
-  const loadDecks = async () => { //TODO: Only ask for a specific deck
+  const loadDecks = async () => { 
     try {
-      const res = await fetch('/api/decks');
+      const res = await fetch('/api/decks?type=all');
       const decksInfo = await res.json();
       setDecksInfo(decksInfo);
     } catch (error) {
@@ -37,6 +38,7 @@ const Deck = () => {
 
   return (
     <div className="container mt-5">
+        {toDeck.go ? <Redirect to={"/decklist?id="+toDeck.id}/> : null}
         {display}
     </div>
   );
