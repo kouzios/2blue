@@ -29,7 +29,8 @@ const Deck = () => {
   const loadDecks = async () => { 
     try {
       const res = await fetch('/api/decks?type=all');
-      const decksInfo = await res.json();
+      const decksInfo = await res.json()
+      console.log(decksInfo)
       setDecksInfo(decksInfo);
     } catch (error) {
       console.error(error);
