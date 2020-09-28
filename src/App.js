@@ -8,6 +8,8 @@ import './App.css';
 const App = () => {
   const [view, setView] = useState("home");
   const [deckID, setDeckID] = useState(null);
+  const [signedIn, setSignedIn] = useState(false);
+  const [profileInfo, setProfileInfo] = useState({email:null, image:null, name: null});
 
   useEffect(() => {
     redirect();
@@ -15,12 +17,16 @@ const App = () => {
   }, [view]);
 
   useEffect(() => {
+    initiateSigninButton();
+  }, [])
+
+  const initiateSigninButton = () => {
     window.gapi.signin2.render("google-sign-in-button", {
       width: 200,
       height: 50,
       onsuccess: onSignIn
     });
-  })
+  }
 
   const openDecklist = (id) => {
     setDeckID(id);
@@ -37,24 +43,39 @@ const App = () => {
   }
 
   function signOut() {
-    var auth2 = window.gapi.auth2.getAuthInstance();
+    let auth2 = window.gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-      console.log('User signed out.');
+      setSignedIn(false);
+      initiateSigninButton();
     });
   }
 
-  function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  const onSignIn = async (googleUser) => {
+    const id_token = googleUser.getAuthResponse().id_token;
+    const res = await fetch('/api/signin', {method:'POST', body: id_token});
+    if(res.status === 200) {
+      const profile = googleUser.getBasicProfile();
+      let email = profile.getEmail();
+      let image = profile.getImageUrl();
+      let name = profile.getName();
+      setProfileInfo({email, image, name});
+      setSignedIn(true);
+    } else {
+      console.log("Authentication failed");
+      signOut();
+    }
   }
 
   return (
     <div>
-      <div id="google-sign-in-button" data-onsuccess="onSignIn"/>
-      <Button id="google-sign-out-button" onClick={signOut}>Sign Out</Button>
+      {
+        signedIn 
+        ?
+        <Button id="google-sign-out-button" onClick={signOut}>Sign Out</Button>
+        :
+        
+        <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
+      }
       <hr/>
       {redirect()}
       <hr/>
