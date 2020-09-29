@@ -1,10 +1,10 @@
-const getAll  =  require('../_operations/getAll');
-const getOne = require('../_operations/getOne');
-const add = require('../_operations/add');
-const update = require('../_operations/update');
-const del = require('../_operations/delete');
+const getAll  =  require('./_operations/getAll');
+const getOne = require('./_operations/getOne');
+const add = require('./_operations/add');
+const update = require('./_operations/update');
+const del = require('./_operations/delete');
 const formattedReturn = require('../_config/formattedReturn');
-const { endpointUrl } = require('airtable');
+// const { endpointUrl } = require('airtable');
 
 module.exports = async (event, table) => {
   if (event.httpMethod === 'GET') {
