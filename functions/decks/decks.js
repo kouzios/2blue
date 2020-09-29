@@ -1,5 +1,5 @@
 const { base } = require('../_config/airtable');
-const routes = require('../_config/routes');
+const routes = require('./routes');
 
 const table = base("Decks");
 exports.handler =  async (event) => {

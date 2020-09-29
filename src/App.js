@@ -52,13 +52,15 @@ const App = () => {
 
   const onSignIn = async (googleUser) => {
     const id_token = googleUser.getAuthResponse().id_token;
-    const res = await fetch('/api/signin', {method:'POST', body: id_token});
+    const profile = googleUser.getBasicProfile();
+    const user = {
+      email:  profile.getEmail(),
+      image: profile.getImageUrl(),
+      name: profile.getName(),
+    };
+    const res = await fetch('/api/signin', {method:'POST', body: JSON.stringify({id_token, user})});
     if(res.status === 200) {
-      const profile = googleUser.getBasicProfile();
-      let email = profile.getEmail();
-      let image = profile.getImageUrl();
-      let name = profile.getName();
-      setProfileInfo({email, image, name});
+      setProfileInfo(user);
       setSignedIn(true);
     } else {
       console.log("Authentication failed");
