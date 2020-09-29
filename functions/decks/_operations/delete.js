@@ -1,4 +1,4 @@
-const formattedReturn = require('../_config/formattedReturn');
+const formattedReturn = require('../../_config/formattedReturn');
 
 module.exports = async (event, table) => {
   const { id } = JSON.parse(event.body);
