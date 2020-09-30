@@ -1,12 +1,12 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext } from "react";
 
 export const IDContext = createContext();
 
 export const IDContextProvider = (props) => {
-    const [id, setID] = useState("-1");
+    const [userID, setUserID] = useState("-1");
   
     return (
-      <IDContext.Provider value={[id, setID]}>
+      <IDContext.Provider value={[userID, setUserID]}>
         {props.children}
       </IDContext.Provider>
     );

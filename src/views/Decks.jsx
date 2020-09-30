@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 
 const Deck = ({...props}) => {
-  const [id] = useContext(IDContext);
+  const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
   const [toDeck, setToDeck] = useState({go:false,id:null});
@@ -29,7 +29,7 @@ const Deck = ({...props}) => {
 
   const loadDecks = async () => { 
     try {
-      const res = await fetch('/api/decks?type=all');
+      const res = await fetch('/api/decks?type=all&userID='+userID);
       const decksInfo = await res.json()
       setDecksInfo(decksInfo);
     } catch (error) {

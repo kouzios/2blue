@@ -6,7 +6,7 @@ import Home from './views/Home';
 import Button from 'react-bootstrap/Button';
 
 const Routes = () => {
-    const [id, setID] = useContext(IDContext);
+    const [userID, setUserID] = useContext(IDContext);
     const [view, setView] = useState("home");
     const [deckID, setDeckID] = useState(null);
     const [signedIn, setSignedIn] = useState(false);
@@ -53,7 +53,7 @@ const Routes = () => {
   
     const onSignIn = async (googleUser) => {
       const id_token = googleUser.getAuthResponse().id_token;
-      setID(id_token);
+      setUserID(id_token);
       const profile = googleUser.getBasicProfile();
       const user = {
         email:  profile.getEmail(),

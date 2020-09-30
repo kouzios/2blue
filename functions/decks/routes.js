@@ -8,9 +8,12 @@ const verify = require('../_config/verify');
 // const { endpointUrl } = require('airtable');
 
 module.exports = async (event, table) => {
-  if(!verify())
+  const param = event.queryStringParameters;
+  if(!verify(param.userID)) {
+    return formattedReturn(401, {});
+  }
+
   if (event.httpMethod === 'GET') {
-    const param = event.queryStringParameters;
     if (param.type === 'all') {
       return await getAll(event, table);
     } else if(param.type === 'one' && param.id){
