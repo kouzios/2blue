@@ -29,7 +29,7 @@ const Deck = ({...props}) => {
 
   const loadDecks = async () => { 
     try {
-      const res = await fetch('/api/decks?type=all&userID='+userID);
+      const res = await fetch('/api/decks?type=all&authID='+userID);
       const decksInfo = await res.json()
       setDecksInfo(decksInfo);
     } catch (error) {

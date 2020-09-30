@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { IDContext } from '../scripts/id-context';
 
 const Deck = ({...props}) => {
+  const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
   const [display, setDisplay] = useState("<div/>");
 
@@ -16,6 +18,7 @@ const Deck = ({...props}) => {
 
   const formatDecks = () => {
     let deck = [];
+    console.log(decksInfo)
     if(decksInfo.id != null) {
       deck = JSON.parse(decksInfo.cards);
       let mapped = deck.map((card, index) => (
@@ -29,10 +32,10 @@ const Deck = ({...props}) => {
 
   const loadDecks = async () => { 
     try {
-      console.log(props)
-      const res = await fetch('/api/decks?type=one&id=' + props.id);
-      const decksInfo = await res.json();
-      setDecksInfo(decksInfo);
+      const res = await fetch('/api/decks?type=one&deckID=' + props.id+'&authID='+userID);
+      const decks = await res.json();
+      console.log(decks)
+      setDecksInfo(decks);
     } catch (error) {
       console.error(error);
     }

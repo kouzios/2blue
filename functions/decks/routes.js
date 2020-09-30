@@ -9,17 +9,17 @@ const verify = require('../_config/verify');
 
 module.exports = async (event, table) => {
   const param = event.queryStringParameters;
-  if(!verify(param.userID)) {
+  const userID = await verify(param.authID);
+  if(!userID) {
     return formattedReturn(401, {});
   }
 
   if (event.httpMethod === 'GET') {
     if (param.type === 'all') {
-      return await getAll(event, table);
-    } else if(param.type === 'one' && param.id){
-      return await getOne(event, table, param.id);
+      return await getAll(table, userID);
+    } else if(param.type === 'one' && param.deckID){
+      return await getOne(table, param.deckID, userID);
     } else {
-      console.log(param)
       return formattedReturn(405, {});
     }
   } else if (event.httpMethod === 'POST') {
