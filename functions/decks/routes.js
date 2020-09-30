@@ -4,9 +4,11 @@ const add = require('./_operations/add');
 const update = require('./_operations/update');
 const del = require('./_operations/delete');
 const formattedReturn = require('../_config/formattedReturn');
+const verify = require('../_config/verify');
 // const { endpointUrl } = require('airtable');
 
 module.exports = async (event, table) => {
+  if(!verify())
   if (event.httpMethod === 'GET') {
     const param = event.queryStringParameters;
     if (param.type === 'all') {

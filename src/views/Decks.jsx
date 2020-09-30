@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
+import { IDContext } from '../scripts/id-context';
 
 const Deck = ({...props}) => {
+  const [id] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
   const [toDeck, setToDeck] = useState({go:false,id:null});
