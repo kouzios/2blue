@@ -3,7 +3,7 @@ import { IDContext } from './scripts/id-context';
 import Decks from './views/Decks';
 import Decklist from './views/Decklist';
 import Home from './views/Home';
-import Button from 'react-bootstrap/Button';
+import {Row, Col, Button} from 'react-bootstrap';
 
 const Routes = () => {
     const [userID, setUserID] = useContext(IDContext);
@@ -22,11 +22,15 @@ const Routes = () => {
     }, [])
   
     const initiateSigninButton = () => {
-      window.gapi.signin2.render("google-sign-in-button", {
-        width: 200,
-        height: 50,
-        onsuccess: onSignIn
-      });
+      try {
+        window.gapi.signin2.render("google-sign-in-button", {
+          width: 200,
+          height: 50,
+          onsuccess: onSignIn
+        });
+      } catch(err) {
+        window.location.reload(false);
+      }
     }
   
     const openDecklist = (id) => {
@@ -73,14 +77,21 @@ const Routes = () => {
   
     return (
       <div>
-        {
-          signedIn 
-          ?
-          <Button id="google-sign-out-button" onClick={signOut}>Sign Out</Button>
-          :
-          
-          <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
-        }
+        <Row id="header">
+          <Col>
+            <img className="banner-logo" src="logo_long.png" alt="Banner logo"/>
+          </Col>
+          <Col>
+            {
+              signedIn 
+              ?
+              <Button id="google-sign-out-button" onClick={signOut}>Sign Out</Button>
+              :
+              
+              <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
+            }
+          </Col>
+        </Row>
         <hr/>
         {redirect()}
         <hr/>

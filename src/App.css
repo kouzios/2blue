@@ -40,3 +40,11 @@
 .clickable { 
   cursor: pointer;
 }
+
+.banner-logo {
+  max-width: 200px;
+}
+
+#header {
+  padding-top: 15px;
+}
