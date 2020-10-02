@@ -41,6 +41,10 @@
   cursor: pointer;
 }
 
+.disabled {
+  cursor: not-allowed;
+}
+
 .banner-logo {
   max-width: 200px;
 }
