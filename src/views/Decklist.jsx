@@ -18,7 +18,6 @@ const Deck = ({...props}) => {
 
   const formatDecks = () => {
     let deck = [];
-    console.log(decksInfo)
     if(decksInfo.id != null) {
       deck = JSON.parse(decksInfo.cards);
       let mapped = deck.map((card, index) => (
@@ -34,7 +33,6 @@ const Deck = ({...props}) => {
     try {
       const res = await fetch('/api/decks?type=one&deckID=' + props.id+'&authID='+userID);
       const decks = await res.json();
-      console.log(decks)
       setDecksInfo(decks);
     } catch (error) {
       console.error(error);

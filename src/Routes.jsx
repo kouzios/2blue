@@ -3,6 +3,7 @@ import { IDContext } from './scripts/id-context';
 import Decks from './views/Decks';
 import Decklist from './views/Decklist';
 import Home from './views/Home';
+import CreateDeck from './views/CreateDeck';
 import {Row, Col, Button} from 'react-bootstrap';
 
 const Routes = () => {
@@ -43,6 +44,7 @@ const Routes = () => {
         case "home": return <Home setView={setView}/>;
         case "decks": return <Decks openDecklist={openDecklist}/>;
         case "decklist": return <Decklist id={deckID} setView={setView}/>;
+        case "create": return <CreateDeck setView={setView}/>;
         default: return <Home/>;
       }
     }
@@ -57,7 +59,7 @@ const Routes = () => {
   
     const onSignIn = async (googleUser) => {
       const id_token = googleUser.getAuthResponse().id_token;
-      setUserID(id_token);
+      setUserID(id_token);//TODO: Wait to let users view decks til this isn't -1
       const profile = googleUser.getBasicProfile();
       const user = {
         email:  profile.getEmail(),
