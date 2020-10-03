@@ -46,7 +46,7 @@ const Routes = () => {
         case "decks": return <Decks openDecklist={openDecklist}/>;
         case "decklist": return <Decklist id={deckID} setView={setView}/>;
         case "create": return <CreateDeck setView={setView}/>;
-        default: return <Home/>;
+        default: return <Home setView={setView}/>;
       }
     }
   
