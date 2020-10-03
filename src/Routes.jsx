@@ -8,7 +8,7 @@ import {Row, Col, Button} from 'react-bootstrap';
 
 const Routes = () => {
     const [userID, setUserID] = useContext(IDContext);
-    const [view, setView] = useState("home");
+    const [view, setView] = useState(window.location.pathname.split("/")[1]);
     const [deckID, setDeckID] = useState(null);
     const [signedIn, setSignedIn] = useState(false);
     const [profileInfo, setProfileInfo] = useState({email:null, image:null, name: null});
@@ -30,7 +30,7 @@ const Routes = () => {
           onsuccess: onSignIn
         });
       } catch(err) {
-        window.location.reload(false);
+        console.error(err);
       }
     }
   
@@ -40,6 +40,7 @@ const Routes = () => {
     }
   
     const redirect = () => {
+      window.history.pushState("", "", '/' + view);
       switch (view) {
         case "home": return <Home setView={setView}/>;
         case "decks": return <Decks openDecklist={openDecklist}/>;
@@ -81,7 +82,7 @@ const Routes = () => {
       <div>
         <Row id="header">
           <Col>
-            <img className="banner-logo" src="logo_long.png" alt="Banner logo"/>
+            <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
           </Col>
           <Col>
             {

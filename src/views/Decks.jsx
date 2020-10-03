@@ -9,7 +9,7 @@ const Deck = ({...props}) => {
 
   useEffect(() => {
     loadDecks();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
       formatDecks();
