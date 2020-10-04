@@ -23,7 +23,7 @@ module.exports = async (event, table) => {
       return formattedReturn(405, {});
     }
   } else if (event.httpMethod === 'POST') {
-    return await add(event, table);
+    return await add(event, table, userID);
   } else if (event.httpMethod === 'PUT') {
     return await update(event, table);
   } else if (event.httpMethod === 'DELETE') {

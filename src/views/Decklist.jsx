@@ -8,6 +8,10 @@ const Deck = ({...props}) => {
 
   useEffect(() => {
     loadDecks();
+  }, [userID]);
+
+  useEffect(() => {
+    loadDecks();
     //eslint-disable-next-line
   }, [props.id]);
 
@@ -22,7 +26,7 @@ const Deck = ({...props}) => {
       deck = JSON.parse(decksInfo.cards);
       let mapped = deck.map((card, index) => (
           <div key={"card"+index}>
-              {card.count}x {card.name}
+              {card.quantity}x {card.name}
           </div>
       ));
       setDisplay(mapped);
@@ -30,8 +34,12 @@ const Deck = ({...props}) => {
   }
 
   const loadDecks = async () => { 
+    let deckID = props.id;
+    if(!deckID) {
+      deckID = (window.location.search).substring(4);
+    }
     try {
-      const res = await fetch('/api/decks?type=one&deckID=' + props.id+'&authID='+userID);
+      const res = await fetch('/api/decks?type=one&deckID=' + deckID +'&authID='+userID);
       const decks = await res.json();
       setDecksInfo(decks);
     } catch (error) {

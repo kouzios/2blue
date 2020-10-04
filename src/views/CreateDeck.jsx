@@ -1,12 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import { Button, Form, Col, InputGroup} from 'react-bootstrap';
+import React, {useState, useEffect, useContext} from 'react';
+import { Button, Form, Col} from 'react-bootstrap';
+import { IDContext } from '../scripts/id-context';
 
-const CURRENT_CARD_DEFAULT = {name:"", quantity:1};
+const CURRENT_CARD_DEFAULT = {name:"", quantity:'1'};
 
 const CreateDeck = ({...props}) => {
+    const [userID] = useContext(IDContext);
     const [cards, setCards] = useState([]); //TODO: Removable entries
     const [displayCards, setDisplayCards] = useState("");
     const [currentCard, setCurrentCard] = useState(CURRENT_CARD_DEFAULT);
+    const [type, setType] = useState("EDH");
+    const [name, setName] = useState("");
 
     useEffect(() => {
         setDisplayCards(cardsToPlaintext());
@@ -28,9 +32,11 @@ const CreateDeck = ({...props}) => {
         
     }
 
-    const handleForm = (event) => {
+    const handleForm = async (event) => {
         event.preventDefault(); //Prevent form submission
-        //TODO
+        //TODO: Check if valid and all that
+        const body = { name, cards, type };
+        const res = await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
     }
 
     return (
@@ -41,11 +47,11 @@ const CreateDeck = ({...props}) => {
 
                     <Form.Group as={Col} md={10} controlId="formDeckName">
                         <Form.Label>Deck Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter deck name"/>
+                        <Form.Control type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter deck name"/>
                     </Form.Group>
                     <Form.Group as={Col} md={2} controlId="formDeckType">
                         <Form.Label>Deck Type</Form.Label>
-                        <Form.Control as="select">
+                        <Form.Control as="select" onChange={(e)=>setType(e.target.value)} value={type}>
                             <option>EDH</option>
                             <option>Brawl</option>
                             <option>Standard</option>

@@ -9,6 +9,7 @@ import {Row, Col, Button} from 'react-bootstrap';
 const Routes = () => {
     const [userID, setUserID] = useContext(IDContext);
     const [view, setView] = useState(window.location.pathname.split("/")[1]);
+    const [params, setParams] = useState("");
     const [deckID, setDeckID] = useState(null);
     const [signedIn, setSignedIn] = useState(false);
     const [profileInfo, setProfileInfo] = useState({email:null, image:null, name: null});
@@ -35,12 +36,14 @@ const Routes = () => {
     }
   
     const openDecklist = (id) => {
+      window.history.pushState("", "", '/' + view + "?id="+id);
       setDeckID(id);
       setView("decklist");
     }
   
     const redirect = () => {
-      window.history.pushState("", "", '/' + view);
+      const params = window.location.search;
+      window.history.pushState("", "", '/' + view + params);
       switch (view) {
         case "home": return <Home setView={setView}/>;
         case "decks": return <Decks openDecklist={openDecklist}/>;
