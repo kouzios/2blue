@@ -3,13 +3,13 @@ import { IDContext } from './scripts/id-context';
 import Decks from './views/Decks';
 import Decklist from './views/Decklist';
 import Home from './views/Home';
+import Profile from './views/Profile';
 import CreateDeck from './views/CreateDeck';
 import {Row, Col, Button} from 'react-bootstrap';
 
 const Routes = () => {
     const [userID, setUserID] = useContext(IDContext);
     const [view, setView] = useState(window.location.pathname.split("/")[1]);
-    const [params, setParams] = useState("");
     const [deckID, setDeckID] = useState(null);
     const [signedIn, setSignedIn] = useState(false);
     const [profileInfo, setProfileInfo] = useState({email:null, image:null, name: null});
@@ -49,6 +49,7 @@ const Routes = () => {
         case "decks": return <Decks openDecklist={openDecklist}/>;
         case "decklist": return <Decklist id={deckID} setView={setView}/>;
         case "create": return <CreateDeck setView={setView}/>;
+        case "profile": return <Profile profileInfo={profileInfo} setView={setView}/>;
         default: return <Home setView={setView}/>;
       }
     }
@@ -63,7 +64,7 @@ const Routes = () => {
   
     const onSignIn = async (googleUser) => {
       const id_token = googleUser.getAuthResponse().id_token;
-      setUserID(id_token);//TODO: Wait to let users view decks til this isn't -1
+      setUserID(id_token);
       const profile = googleUser.getBasicProfile();
       const user = {
         email:  profile.getEmail(),
@@ -96,6 +97,9 @@ const Routes = () => {
               
               <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
             }
+          </Col>
+          <Col>
+            <img className="clickable" id="profile-image" src={profileInfo.image} onClick={()=>setView("profile")} alt="Profile Image"/>
           </Col>
         </Row>
         <hr/>

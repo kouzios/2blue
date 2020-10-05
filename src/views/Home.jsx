@@ -1,7 +1,6 @@
 import React from 'react';
-import { useEffect } from 'react';
 
-const Home = ({...props}) => {
+const Profile = ({...props}) => {
   return (
     <div className="container mt-5">
       <div className="clickable" onClick={() => {console.log("TODO")}}>Start a game</div>
@@ -11,4 +10,4 @@ const Home = ({...props}) => {
   );
 }
 
-export default Home;
+export default Profile;
