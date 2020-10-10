@@ -8,6 +8,7 @@ const Deck = ({...props}) => {
 
   useEffect(() => {
     loadDecks();
+    //eslint-disable-next-line
   }, [userID]);
 
   useEffect(() => {

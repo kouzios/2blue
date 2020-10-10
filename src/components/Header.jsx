@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 import { ProfileContext } from '../scripts/profile-context';
 import { SignedinContext } from '../scripts/signedin-context';
@@ -6,13 +6,15 @@ import {Row, Col, Button} from 'react-bootstrap';
 
 
 const Header = ({...props}) => {
+    //eslint-disable-next-line
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
     const [signedIn, setSignedIn] = useContext(SignedinContext);
 
     useEffect(() => {
         initiateSigninButton();
-    }, [])//TODO: Profile image expands to have options like sign out, profile, etc
+        //eslint-disable-next-line
+    }, [])
 
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
@@ -71,8 +73,8 @@ const Header = ({...props}) => {
                     <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
                 }
                 </Col>
-                <Col>{/*TODO: Make this invisible if not signed in*/}
-                <img className="clickable" id="profile-image" src={profileInfo.image} onClick={()=>props.setView("profile")}/>
+                <Col>
+                <img className="clickable" id="profile-image" src={profileInfo.image} alt="Profile" onClick={()=>props.setView("profile")}/>
                 </Col>
             </Row>
             <hr/>

@@ -11,6 +11,7 @@ const Home = ({...props}) => {
             Email: {props.profileInfo.email}
         </Row>
         <Row>
+  {/*eslint-disable-next-line*/}
             Profile Picture: <img id="profile-image" src={props.profileInfo.image} alt="Profile Page Image"/>
         </Row>
     </div>

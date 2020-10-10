@@ -14,6 +14,7 @@ const CreateDeck = ({...props}) => {
 
     useEffect(() => {
         setDisplayCards(cardsToPlaintext());
+        //eslint-disable-next-line
     }, [cards])
 
     const cardsToPlaintext = () => {
@@ -36,7 +37,7 @@ const CreateDeck = ({...props}) => {
         event.preventDefault(); //Prevent form submission
         //TODO: Check if valid and all that
         const body = { name, cards, type };
-        const res = await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
+        await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
     }
 
     return (
@@ -44,7 +45,6 @@ const CreateDeck = ({...props}) => {
             <h2>Create a deck</h2>
             <Form onSubmit={(e) => handleForm(e)}>
                 <Form.Row>
-
                     <Form.Group as={Col} md={10} controlId="formDeckName">
                         <Form.Label>Deck Name</Form.Label>
                         <Form.Control type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter deck name"/>
