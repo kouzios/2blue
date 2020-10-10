@@ -1,24 +1,25 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 import { ProfileContext } from '../scripts/profile-context';
+import { SignedinContext } from '../scripts/signedin-context';
 import {Row, Col, Button} from 'react-bootstrap';
 
 
 const Header = ({...props}) => {
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
-    const [signedIn, setSignedIn] = useState(false);
+    const [signedIn, setSignedIn] = useContext(SignedinContext);
 
     useEffect(() => {
         initiateSigninButton();
-    }, [])
+    }, [])//TODO: Profile image expands to have options like sign out, profile, etc
 
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
             setSignedIn(false);
             initiateSigninButton();
-            props.setView("Home");
+            props.setView("home");
         });
     }
 
