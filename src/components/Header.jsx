@@ -16,12 +16,15 @@ const Header = ({...props}) => {
         //eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        props.setView(signedIn ? "home" : "welcome");
+    }, [signedIn]);
+
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
             setSignedIn(false);
             initiateSigninButton();
-            props.setView("home");
         });
     }
 
@@ -48,9 +51,9 @@ const Header = ({...props}) => {
     const initiateSigninButton = () => {
         try {
             window.gapi.signin2.render("google-sign-in-button", {
-            width: 200,
-            height: 50,
-            onsuccess: onSignIn
+                width: 200,
+                height: 50,
+                onsuccess: onSignIn
             });
         } catch(err) {
             console.error(err);

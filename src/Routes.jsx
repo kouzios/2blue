@@ -14,21 +14,28 @@ const Routes = () => {
   const [signedIn] = useContext(SignedinContext);
   const [view, setView] = useState(window.location.pathname.split("/")[1]);
   const [deckID, setDeckID] = useState(null);
+  const [route, setRoute] = useState(null);
   
   useEffect(() => {
-    redirect();
+    routing();
     //eslint-disable-next-line
   }, [view]);
-  
+
+  //On back/forward history event, change DOM accordingly
+  window.onpopstate = function(event) {
+    const path = (document.location.pathname).slice(1);
+    setView(path);
+  }
+
   //TODO: Big tasks
   //On history back/forward, setView
   //Headerbar properly space
   //Headerbar signedin, profile expands for options
-  //Homepage signed out restyle
   //Homepage signed in restyle
   //View decks restyle
   //View decklist restyle
   //Make header profile image dissapear when signed out
+  //Make welcome page welcoming
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -36,11 +43,21 @@ const Routes = () => {
     setView("decklist");
   }
 
-  const redirect = () => {
+  const routing = () => {
+    setRoute(determineRoute());
+  }
+
+  const determineRoute = () => {
+    if(!signedIn) {
+      window.history.pushState("", "", '/welcome');
+      return <Welcome/>;
+    }
+
     const params = window.location.search;
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
-      case "home": return (signedIn ? <Home setView={setView}/> : <Welcome/>);
+      case "home": return <Home setView={setView}/>;
+      case "welcome": return <Welcome />
       case "decks": return <Decks openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
@@ -52,7 +69,7 @@ const Routes = () => {
   return (
     <div>
       <Header setView={setView}/>
-      {redirect()}
+      { route }
     </div>
   );
 }
