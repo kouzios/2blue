@@ -5,7 +5,7 @@ import { SignedinContext } from '../scripts/signedin-context';
 import {Row, Col, Button} from 'react-bootstrap';
 
 
-const Header = ({...props}) => {
+const Header = ({setView, ...props}) => {
     //eslint-disable-next-line
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
@@ -17,7 +17,8 @@ const Header = ({...props}) => {
     }, [])
 
     useEffect(() => {
-        props.setView(signedIn ? "home" : "welcome");
+        setView(signedIn ? "home" : "welcome");
+        //eslint-disable-next-line
     }, [signedIn]);
 
     function signOut() {
@@ -57,6 +58,7 @@ const Header = ({...props}) => {
             });
         } catch(err) {
             console.error(err);
+            setTimeout(initiateSigninButton, 500);
         }
     }
 
@@ -64,7 +66,7 @@ const Header = ({...props}) => {
         <div>
             <Row id="header">
                 <Col>
-                <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>props.setView("home")}/>
+                    <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
                 </Col>
                 <Col>
                 {
@@ -77,7 +79,7 @@ const Header = ({...props}) => {
                 }
                 </Col>
                 <Col>
-                <img className="clickable" id="profile-image" src={profileInfo.image} alt="Profile" onClick={()=>props.setView("profile")}/>
+                <img className="clickable" id="profile-image" src={profileInfo.image} alt="Profile" onClick={()=>setView("profile")}/>
                 </Col>
             </Row>
             <hr/>
