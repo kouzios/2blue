@@ -28,8 +28,6 @@ const Routes = () => {
   }
 
   //TODO: Big tasks before "true" deploy
-  //On history back/forward, setView
-  //Headerbar properly space
   //Headerbar signedin, profile expands for options
   //Homepage signed in restyle
   //View decks restyle
@@ -37,6 +35,7 @@ const Routes = () => {
   //Make header profile image dissapear when signed out
   //Make welcome page welcoming
   //Netlify doesn't let you alter url manually? Check netlify.toml
+  //Fix horizontal scrolling
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);

@@ -1,8 +1,8 @@
-import React, {useEffect, useContext} from 'react';
+import React, {forwardRef, useEffect, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 import { ProfileContext } from '../scripts/profile-context';
 import { SignedinContext } from '../scripts/signedin-context';
-import {Row, Col, Button} from 'react-bootstrap';
+import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 
 
 const Header = ({setView, ...props}) => {
@@ -62,24 +62,52 @@ const Header = ({setView, ...props}) => {
         }
     }
 
+    const ProfileImage = React.forwardRef(({onClick, ...props}, ref) => (
+        <img 
+            className="clickable" 
+            id="profile-image" 
+            src={profileInfo.image} 
+            ref={ref}
+            onClick={(e)=> {
+                e.preventDefault();
+                onClick(e);
+            }}
+            alt="Profile"
+        />
+    ));
+
     return (
         <div>
-            <Row id="header">
-                <Col>
+            <Row id="header" className="d-flex justify-content-end">
+                <Col className="d-flex justify-content-start">
                     <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
                 </Col>
-                <Col>
-                {
+                <Col className="d-flex justify-content-end">
+                    { 
                     signedIn 
-                    ?
-                    <Button id="google-sign-out-button" onClick={signOut}>Sign Out</Button>
+                    ? 
+                        <Dropdown>
+                            <Dropdown.Toggle as={ProfileImage} id="profile-image-dropdown">
+                                Yeet
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item eventKey="1">
+                                    <span onClick={()=>setView("profile")}>Profile</span>
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey="2">
+                                    {
+                                    signedIn 
+                                    ?
+                                    <span id="google-sign-out-button" onClick={signOut}>Sign Out</span>
+                                    :
+                                    <div id="google-sign-in-button" data-onsuccess="onSignIn">Sign In</div>
+                                    }
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     :
-                    
-                    <div id="google-sign-in-button" data-onsuccess="onSignIn">more</div>
-                }
-                </Col>
-                <Col>
-                <img className="clickable" id="profile-image" src={profileInfo.image} alt="Profile" onClick={()=>setView("profile")}/>
+                    <div id="google-sign-in-button" data-onsuccess="onSignIn">Sign In</div>
+                    }
                 </Col>
             </Row>
             <hr/>
