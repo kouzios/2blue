@@ -9,3 +9,7 @@
     to = "/index.html"
     status = 200
     query = {id = ":id"}
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
