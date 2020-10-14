@@ -36,6 +36,7 @@ const Routes = () => {
   //Make welcome page welcoming
   //Netlify doesn't let you alter url manually? Check netlify.toml
   //Fix horizontal scrolling
+  //at least slightly fix mobile
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
