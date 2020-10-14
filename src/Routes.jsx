@@ -28,11 +28,9 @@ const Routes = () => {
   }
 
   //TODO: Big tasks before "true" deploy
-  //Headerbar signedin, profile expands for options
   //Homepage signed in restyle
   //View decks restyle
   //View decklist restyle
-  //Make header profile image dissapear when signed out
   //Make welcome page welcoming
   //Netlify doesn't let you alter url manually? Check netlify.toml
   //Fix horizontal scrolling
