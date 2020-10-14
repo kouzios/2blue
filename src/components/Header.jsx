@@ -1,15 +1,17 @@
-import React, {forwardRef, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 import { ProfileContext } from '../scripts/profile-context';
 import { SignedinContext } from '../scripts/signedin-context';
 import { Row, Col, Button, Dropdown } from 'react-bootstrap';
 
 
-const Header = ({setView, ...props}) => {
+const Header = ({setView, setSignedInView, ...props}) => {
     //eslint-disable-next-line
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
     const [signedIn, setSignedIn] = useContext(SignedinContext);
+    const [initialPath, setInitialPath] = useState((document.location.pathname).slice(1));
+    const [initialID, setInitialID] = useState(window.location.search);
 
     useEffect(() => {
         initiateSigninButton();
@@ -17,7 +19,7 @@ const Header = ({setView, ...props}) => {
     }, [])
 
     useEffect(() => {
-        setView(signedIn ? "home" : "welcome");
+        signedIn ? setSignedInView(initialPath, initialID) : setView("welcome");
         //eslint-disable-next-line
     }, [signedIn]);
 

@@ -12,7 +12,7 @@ import Welcome from './views/Welcome';
 const Routes = () => {
   const [profileInfo] = useContext(ProfileContext);
   const [signedIn] = useContext(SignedinContext);
-  const [view, setView] = useState(window.location.pathname.split("/")[1]);
+  const [view, setView] = useState((document.location.pathname).slice(1));
   const [deckID, setDeckID] = useState(null);
   const [route, setRoute] = useState(null);
   
@@ -65,9 +65,19 @@ const Routes = () => {
     }
   }
 
+  const setSignedInView = (path, params) => {
+    //If at welcome screen, move to home screen. Else, keep status quo
+    if(path === "welcome" ) { 
+      setView("home");
+    } else {
+      window.history.pushState("", "", '/' + view + params);
+      setView(path)
+    }
+  }
+
   return (
     <div>
-      <Header setView={setView}/>
+      <Header setSignedInView={setSignedInView} setView={setView}/>
       { route }
     </div>
   );
