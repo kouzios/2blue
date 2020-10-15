@@ -32,9 +32,9 @@ const Routes = () => {
   //View decks restyle
   //View decklist restyle
   //Make welcome page welcoming
-  //Netlify doesn't let you alter url manually? Check netlify.toml
   //Fix horizontal scrolling
   //at least slightly fix mobile
+  //hide "start a game" til feature is implemented
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);

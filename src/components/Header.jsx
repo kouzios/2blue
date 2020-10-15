@@ -112,7 +112,6 @@ const Header = ({setView, setSignedInView, ...props}) => {
                     }
                 </Col>
             </Row>
-            <hr/>
         </div>
     )
 }

@@ -21,6 +21,11 @@ html, body {
   max-height: 40px;
 }
 
+.banner-logo-hero {
+  max-width: 400px;
+  max-height: 100px;
+}
+
 #header {
   padding: 5px 20px 0px 20px;
 }
@@ -29,4 +34,29 @@ html, body {
   width: 40px;
   border-radius: 50%;
   border: 2px solid blue;
+}
+
+#background {
+  background: linear-gradient(rgba(73, 74, 117, 0.5), rgba(0,0,0,0.8)),url("resources/background.jpg");
+  background-position: center;
+	background-repeat: no-repeat;
+	position: relative;
+  height: calc(100vh - 55px);
+  width: 100%;
+}
+
+#background span {
+  font-size: 32px;
+  color: white;
+  /*TODO: Change font */
+}
+
+#background #opacity-layer {
+  flex-grow: 0 !important;
+  background: rgba(56, 71, 107, 0.5);
+  border-radius: 15px;
+}
+
+#background #opacity-layer .row {
+  padding: 5px 10px 5px 10px;
 }
