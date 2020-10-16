@@ -27,14 +27,19 @@ const Routes = () => {
     setView(path);
   }
 
-  //TODO: Big tasks before "true" deploy
+  //TODO: Big tasks
   //Homepage signed in restyle
   //View decks restyle
   //View decklist restyle
-  //Make welcome page welcoming
   //Fix horizontal scrolling
   //at least slightly fix mobile
   //hide "start a game" til feature is implemented
+  //Have default webpage be something like "checking login" with a spinny circle
+  //SCSS for each page?
+  //Create color scheme
+  //MTG card integration
+  //Start a game
+  //add iconography
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);

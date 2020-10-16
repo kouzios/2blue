@@ -41,8 +41,8 @@ html, body {
   background-position: center;
 	background-repeat: no-repeat;
 	position: relative;
-  height: calc(100vh - 55px);
   width: 100%;
+  height: calc(100vh - 55px);
 }
 
 #background span {
@@ -52,11 +52,34 @@ html, body {
 }
 
 #background #opacity-layer {
-  flex-grow: 0 !important;
   background: rgba(56, 71, 107, 0.5);
   border-radius: 15px;
 }
 
 #background #opacity-layer .row {
   padding: 5px 10px 5px 10px;
+}
+
+#selection {
+  flex-grow: 0 !important;
+}
+
+#selection #opacity-layer {
+  background: rgba(31, 133, 192, 0.8);
+  border-radius: 15px;
+  min-width: 350px;
+}
+
+#selection #opacity-layer .row {
+  padding: 5px 10px 5px 10px;
+}
+
+.no-flex {
+  flex-grow: 0 !important;
+}
+
+#selection {
+  height: calc(100vh - 55px);
+  color: white;
+  font-size: 32px;
 }
