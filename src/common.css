@@ -79,7 +79,7 @@ html, body {
 }
 
 #selection {
-  height: calc(100vh - 55px);
+  margin-top: 50px;
+  /* height: calc(100vh - 55px); */
   color: white;
-  font-size: 32px;
 }

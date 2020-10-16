@@ -40,6 +40,7 @@ const Routes = () => {
   //MTG card integration
   //Start a game
   //add iconography
+  //Make seperate prop from Decks to show all decks
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -62,7 +63,7 @@ const Routes = () => {
     switch (view) {
       case "home": return <Home setView={setView}/>;
       case "welcome": return <Welcome />
-      case "decks": return <Decks openDecklist={openDecklist}/>;
+      case "decks": return <Decks total="100" openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
       case "profile": return <Profile profileInfo={profileInfo} setView={setView}/>;
@@ -84,6 +85,7 @@ const Routes = () => {
     <div>
       <Header setSignedInView={setSignedInView} setView={setView}/>
       { route }
+      <div>Footer</div>
     </div>
   );
 }

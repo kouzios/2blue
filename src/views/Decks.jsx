@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 
-const Deck = ({...props}) => {
+const Deck = ({total, ...props}) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
@@ -19,11 +19,17 @@ const Deck = ({...props}) => {
 
   const formatDecks = () => {
       if(decksInfo.length > 0) {
-        let mapped = decksInfo.map((deck, index) => (
-            <div onClick={() => setToDeck({go:true,id:deck.id})} key={"deck"+index} id={deck.id} className="clickable">
-                {deck.name}
-            </div>
-        ));
+        let mapped = decksInfo.map((deck, index) => {
+          if(index < total) {
+            return (
+              <div onClick={() => setToDeck({go:true,id:deck.id})} key={"deck"+index} id={deck.id} className="clickable">
+                  {deck.name}
+              </div>
+            )
+          } else {
+            return null
+          }
+        });
         setDisplay(mapped);
       }
   }
@@ -39,7 +45,7 @@ const Deck = ({...props}) => {
   };
 
   return (
-    <div className="container mt-5">
+    <div>
         {toDeck.go ? <div onClick={props.openDecklist(toDeck.id)}/> : null}
         {display}
     </div>

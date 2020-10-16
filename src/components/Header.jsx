@@ -89,10 +89,9 @@ const Header = ({setView, setSignedInView, ...props}) => {
                     signedIn 
                     ? 
                         <Dropdown>
-                            <Dropdown.Toggle as={ProfileImage} id="profile-image-dropdown">
-                                Yeet
-                            </Dropdown.Toggle>
+                            <Dropdown.Toggle as={ProfileImage} id="profile-image-dropdown"/>
                             <Dropdown.Menu>
+                                <Dropdown.Header>{profileInfo.name}</Dropdown.Header>
                                 <Dropdown.Item eventKey="1">
                                     <span onClick={()=>setView("profile")}>Profile</span>
                                 </Dropdown.Item>
