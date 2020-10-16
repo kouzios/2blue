@@ -60,10 +60,6 @@ html, body {
   padding: 5px 10px 5px 10px;
 }
 
-#selection {
-  flex-grow: 0 !important;
-}
-
 #selection #opacity-layer {
   background: rgba(31, 133, 192, 0.8);
   border-radius: 15px;
@@ -82,4 +78,23 @@ html, body {
   margin-top: 50px;
   /* height: calc(100vh - 55px); */
   color: white;
+}
+
+#loading {
+  min-width: 250px;
+}
+
+#loading-img {
+  width: 100px;
+  height: 100px;
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }

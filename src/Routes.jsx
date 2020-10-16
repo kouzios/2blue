@@ -8,6 +8,7 @@ import Profile from './views/Profile';
 import CreateDeck from './views/CreateDeck';
 import Header from './components/Header';
 import Welcome from './views/Welcome';
+import Loading from './views/Loading';
 
 const Routes = () => {
   const [profileInfo] = useContext(ProfileContext);
@@ -33,14 +34,13 @@ const Routes = () => {
   //View decklist restyle
   //Fix horizontal scrolling
   //at least slightly fix mobile
-  //hide "start a game" til feature is implemented
-  //Have default webpage be something like "checking login" with a spinny circle
   //SCSS for each page?
   //Create color scheme
   //MTG card integration
   //Start a game
   //add iconography
   //Make seperate prop from Decks to show all decks
+  //Alter color scheme of Home page (not just blue, white, add one more color?)
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -54,8 +54,8 @@ const Routes = () => {
 
   const determineRoute = () => {
     if(!signedIn) {
-      window.history.pushState("", "", '/welcome');
-      return <Welcome/>;
+      window.history.pushState("", "", '/loading');
+      return <Loading/>;
     }
 
     const params = window.location.search;
