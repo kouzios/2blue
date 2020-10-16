@@ -41,6 +41,7 @@ const Routes = () => {
   //add iconography
   //Make seperate prop from Decks to show all decks
   //Alter color scheme of Home page (not just blue, white, add one more color?)
+  //On sign out, you get stuck on loading
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -53,9 +54,14 @@ const Routes = () => {
   }
 
   const determineRoute = () => {
-    if(!signedIn) {
+    if(signedIn === null || signedIn === undefined) {
       window.history.pushState("", "", '/loading');
       return <Loading/>;
+    }
+    
+    if(signedIn === false) {
+      window.history.pushState("", "", '/welcome');
+      return <Welcome/>;
     }
 
     const params = window.location.search;
