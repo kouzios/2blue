@@ -17,8 +17,10 @@ const Routes = () => {
   const [view, setView] = useState((document.location.pathname).slice(1));
   const [deckID, setDeckID] = useState(null);
   const [route, setRoute] = useState(null);
+  const [authTimer, setAuthTimer] = useState(null);
   
   useEffect(() => {
+    clearTimeout(authTimer);
     routing();
     //eslint-disable-next-line
   }, [view]);
@@ -40,7 +42,6 @@ const Routes = () => {
   //add iconography
   //Make seperate prop from Decks to show all decks
   //Alter color scheme of Home page (not just blue, white, add one more color?) Maybe white links, grey text?
-  //Footer?
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -52,17 +53,33 @@ const Routes = () => {
     setRoute(determineRoute());
   }
 
+  //Continually check if we can connect to Google
+  const checkAuthStatus = () => {
+    setTimeout(() => {
+      const google = window.gapi.auth2;
+      if(google) {
+        setView(determineRoute);
+      }  else {
+        checkAuthStatus();
+      }
+    }, 1500)
+  }
+
   const determineRoute = () => {
-    if(signedIn === null || signedIn === undefined) {
+    const google = window.gapi.auth2;
+    if(google) {
+      const GoogleAuth = google.getAuthInstance();
+      const signedIn = GoogleAuth.isSignedIn.get();
+      if(!signedIn) {
+        window.history.pushState("", "", '/welcome');
+        return <Welcome/>;
+      }
+    } else {
+      setAuthTimer(checkAuthStatus());
       window.history.pushState("", "", '/loading');
       return <Loading/>;
     }
-    
-    if(signedIn === false) {
-      window.history.pushState("", "", '/welcome');
-      return <Welcome/>;
-    }
-
+  
     const params = window.location.search;
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
@@ -78,7 +95,7 @@ const Routes = () => {
 
   const setSignedInView = (path, params) => {
     //If at welcome screen, move to home screen. Else, keep status quo
-    if(path === "welcome" ) { 
+    if(path === "welcome" || path === "loading") { 
       setView("home");
     } else {
       window.history.pushState("", "", '/' + view + params);
@@ -90,7 +107,7 @@ const Routes = () => {
     <div>
       <Header setSignedInView={setSignedInView} setView={setView}/>
       { route }
-      <Footer setView={setView}/>
+      { signedIn ? <Footer setView={setView}/> : null }
     </div>
   );
 }

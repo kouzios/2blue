@@ -32,6 +32,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     }
 
     const onSignIn = async (googleUser) => {
+        setView("loading");
         const id_token = googleUser.getAuthResponse().id_token;
         setUserID(id_token);
         const profile = googleUser.getBasicProfile();
@@ -43,6 +44,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
             
         const res = await fetch('/api/signin', {method:'POST', body: JSON.stringify({id_token, user})});
         if(res.status === 200) {
+            console.log("Authentication success");
             setProfileInfo(user);
             setSignedIn(true);
         } else {
@@ -51,12 +53,17 @@ const Header = ({setView, setSignedInView, ...props}) => {
         }
     }  
 
+    const onFailure = async () => {
+        alert("Failure")
+    }
+
     const initiateSigninButton = () => {
         try {
             window.gapi.signin2.render("google-sign-in-button", {
                 width: 200,
                 height: 50,
-                onsuccess: onSignIn
+                onsuccess: onSignIn,
+                onfailure: onFailure
             });
         } catch(err) {
             console.error(err);
