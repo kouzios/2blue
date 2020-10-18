@@ -8,7 +8,7 @@ const fakeDecks = [
   "aaaaahnoo"
 ]
 
-const Profile = ({...props}) => { 
+const Profile = ({openDecklist, ...props}) => { 
   return (
     <div id="selection">
       <div id="overlay" className="row h-100 justify-content-around align-items-center">
@@ -21,7 +21,7 @@ const Profile = ({...props}) => {
           <Row><h3 className="clickable" onClick={() => props.setView("create")}>Create a deck</h3></Row>
           <hr/>
           <Row><span>Recent Decks:</span></Row>
-          <Decks total="5"/>
+          <Decks openDecklist={openDecklist} total="5"/>
           <Row><h5 className="clickable" onClick={() => props.setView("decks")}>View more {">"}</h5></Row>
         </Col>
       </div>

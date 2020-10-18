@@ -29,10 +29,8 @@ const Routes = () => {
   }
 
   //TODO: Big tasks
-  //Homepage signed in restyle
   //View decks restyle
   //View decklist restyle
-  //Fix horizontal scrolling
   //at least slightly fix mobile
   //SCSS for each page?
   //Create color scheme
@@ -40,8 +38,8 @@ const Routes = () => {
   //Start a game
   //add iconography
   //Make seperate prop from Decks to show all decks
-  //Alter color scheme of Home page (not just blue, white, add one more color?)
-  //On sign out, you get stuck on loading
+  //Alter color scheme of Home page (not just blue, white, add one more color?) Maybe white links, grey text?
+  //Footer?
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -67,7 +65,7 @@ const Routes = () => {
     const params = window.location.search;
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
-      case "home": return <Home setView={setView}/>;
+      case "home": return <Home openDecklist={openDecklist} setView={setView}/>;
       case "welcome": return <Welcome />
       case "decks": return <Decks total="100" openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
