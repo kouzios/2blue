@@ -98,3 +98,25 @@ html, body {
     transform: rotate(359deg);
   }
 }
+
+.footer-logo {
+  width: 55px;
+  height: 55px;
+}
+
+.github {
+  width: 40px;
+  height: 40px;
+}
+
+#footer-name {
+  font-size:  24px;
+  font-family:'Courier New', Courier, monospace;
+  margin: 5px 0px 0px 5px;
+}
+
+#footer-sitename {
+  font-size: 24px;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 10px 0px 0px 0px;
+}

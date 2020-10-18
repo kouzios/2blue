@@ -7,6 +7,7 @@ import Home from './views/Home';
 import Profile from './views/Profile';
 import CreateDeck from './views/CreateDeck';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Welcome from './views/Welcome';
 import Loading from './views/Loading';
 
@@ -89,7 +90,7 @@ const Routes = () => {
     <div>
       <Header setSignedInView={setSignedInView} setView={setView}/>
       { route }
-      <div>Footer</div>
+      <Footer setView={setView}/>
     </div>
   );
 }
