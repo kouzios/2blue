@@ -1,11 +1,10 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 
-const Deck = ({total, ...props}) => {
+const Deck = ({total, openDecklist, ...props}) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState([]);
   const [display, setDisplay] = useState("<div/>");
-  const [toDeck, setToDeck] = useState({go:false,id:null});
 
   useEffect(() => {
     loadDecks();
@@ -20,9 +19,10 @@ const Deck = ({total, ...props}) => {
   const formatDecks = () => {
       if(decksInfo.length > 0) {
         let mapped = decksInfo.map((deck, index) => {
+          //Limit displayed deck number to specified total
           if(index < total) {
             return (
-              <div onClick={() => setToDeck({go:true,id:deck.id})} key={"deck"+index} id={deck.id} className="clickable">
+              <div onClick={() => openDecklist(deck.id)} key={"deck"+index} id={deck.id} className="clickable">
                   {deck.name}
               </div>
             )
@@ -46,7 +46,6 @@ const Deck = ({total, ...props}) => {
 
   return (
     <div>
-        {toDeck.go ? <div onClick={props.openDecklist(toDeck.id)}/> : null}
         {display}
     </div>
   );

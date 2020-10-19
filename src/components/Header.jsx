@@ -10,18 +10,43 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
     const [signedIn, setSignedIn] = useContext(SignedinContext);
-    const [initialPath, setInitialPath] = useState((document.location.pathname).slice(1));
+    const [initialPath, setInitialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
     const [initialID, setInitialID] = useState(window.location.search);
+    const [timer, setTimer] = useState(null);
 
     useEffect(() => {
         initiateSigninButton();
+        setTimer(checkAuthStatus());
         //eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        signedIn ? setSignedInView(initialPath, initialID) : setView("welcome");
+        //If Google returned a signed in state for user
+        if(signedIn === true || signedIn === false) {
+            clearTimeout(timer);
+            signedIn ? setSignedInView(initialPath, initialID) : setView("welcome");
+        }
         //eslint-disable-next-line
     }, [signedIn]);
+
+    //Continually check if we can connect to Google
+    const checkAuthStatus = () => {
+        if(!signedIn) {
+            setTimeout(() => {
+                const google = window.gapi.auth2;
+                if(google) {
+                    const GoogleAuth = google.getAuthInstance();
+                    const googleStatusSignedIn = GoogleAuth.isSignedIn.get();
+                    if(!googleStatusSignedIn) {
+                        setSignedIn(false);
+                    }
+                }  else {
+                    checkAuthStatus();
+                }
+            }, 1500)
+        }
+       
+    }
 
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
@@ -53,17 +78,12 @@ const Header = ({setView, setSignedInView, ...props}) => {
         }
     }  
 
-    const onFailure = async () => {
-        alert("Failure")
-    }
-
     const initiateSigninButton = () => {
         try {
             window.gapi.signin2.render("google-sign-in-button", {
                 width: 200,
                 height: 50,
                 onsuccess: onSignIn,
-                onfailure: onFailure
             });
         } catch(err) {
             console.error(err);
@@ -103,13 +123,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
                                     <span onClick={()=>setView("profile")}>Profile</span>
                                 </Dropdown.Item>
                                 <Dropdown.Item eventKey="2">
-                                    {
-                                    signedIn 
-                                    ?
                                     <span id="google-sign-out-button" onClick={signOut}>Sign Out</span>
-                                    :
-                                    <div id="google-sign-in-button" data-onsuccess="onSignIn">Sign In</div>
-                                    }
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
