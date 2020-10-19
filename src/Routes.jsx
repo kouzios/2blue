@@ -47,7 +47,6 @@ const Routes = () => {
   //on any 401, send back to Welcome
 
   const openDecklist = (id) => {
-    console.log("hello")
     window.history.pushState("", "", '/' + view + "?id="+id);
     setDeckID(id);
     setView("decklist");
@@ -64,7 +63,6 @@ const Routes = () => {
     }
   
     const params = window.location.search;
-    console.log(view)
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
       case "home": return <Home openDecklist={openDecklist} setView={setView}/>;
@@ -82,7 +80,6 @@ const Routes = () => {
     if(path === "welcome" || path === "loading") { 
       setView("home");
     } else {
-      console.log(view)
       window.history.pushState("", "", '/' + view + params);
       setView(path)
     }

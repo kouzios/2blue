@@ -120,3 +120,7 @@ html, body {
   font-family: 'Courier New', Courier, monospace;
   margin: 10px 0px 0px 0px;
 }
+
+.loading-content {
+  color: lightgrey;
+}

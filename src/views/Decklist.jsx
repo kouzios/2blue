@@ -1,10 +1,12 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 
+const initialLoading = <span className="loading-content">Loading Cards...</span>;
+
 const Deck = ({...props}) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
-  const [display, setDisplay] = useState("<div/>");
+  const [display, setDisplay] = useState(initialLoading);
 
   useEffect(() => {
     loadDecks();
