@@ -19,6 +19,7 @@ const Routes = () => {
   const [route, setRoute] = useState(null);
   
   useEffect(() => {
+    console.log("Set View: " + view)
     routing();
     //eslint-disable-next-line
   }, [view]);
@@ -44,7 +45,6 @@ const Routes = () => {
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //use google profile on login instead of storing it in DB? Or should this be changable? (Maybe a "default" or "sync" option?)
   //on any 401, send back to Welcome
-  //initial load sends u to homepage then send u back to loading
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -81,8 +81,9 @@ const Routes = () => {
   }
 
   const setSignedInView = (path, params) => {
+    console.log("Set signed in view: " + path)
     //If at welcome screen, move to home screen. Else, keep status quo
-    if(path === "welcome" || path === "loading") { 
+    if(path === "welcome" || path === "loading" || !path) { 
       setView("home");
     } else {
       window.history.pushState("", "", '/' + view + params);
