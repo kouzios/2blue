@@ -27,7 +27,6 @@ const Routes = () => {
   window.onpopstate = function(event) {
     const path = (document.location.pathname).slice(1);
     setView(path);
-    //TODO: Going <- to loading just changes URL, not the actual display rn?
   }
 
   //TODO: Big tasks
@@ -45,6 +44,7 @@ const Routes = () => {
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //use google profile on login instead of storing it in DB? Or should this be changable? (Maybe a "default" or "sync" option?)
   //on any 401, send back to Welcome
+  //initial load sends u to homepage then send u back to loading
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -60,6 +60,11 @@ const Routes = () => {
     if(!view) {
       window.history.pushState("", "", '/loading');
       return <Loading/>;
+    }
+
+    if(view === "loading") {
+      window.history.pushState("", "", '/home');
+      return <Home/>
     }
   
     const params = window.location.search;
