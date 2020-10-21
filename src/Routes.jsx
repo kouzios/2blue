@@ -32,21 +32,15 @@ const Routes = () => {
     setView(path);
   }
 
-  //TODO: Big tasks
-  //View decks restyle
-  //View decklist restyle
+  //TODO: Big tasks before using link in job applications
   //at least slightly fix mobile
-  //SCSS for each page?
-  //Create color scheme
-  //MTG card integration
   //Start a game
   //add iconography
-  //Make seperate prop from Decks to show all decks
-  //Alter color scheme of Home page (not just blue, white, add one more color?) Maybe white links, grey text?
-  //better image loading
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //use google profile on login instead of storing it in DB? Or should this be changable? (Maybe a "default" or "sync" option?)
   //on any 401, send back to Welcome
+  //pop state goign to decklists needs to occur multiple times which is bad
+  //Only have id stored on the decklists page now
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);

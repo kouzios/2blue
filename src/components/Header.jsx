@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 import { ProfileContext } from '../scripts/profile-context';
 import { SignedinContext } from '../scripts/signedin-context';
-import { Row, Col, Button, Dropdown } from 'react-bootstrap';
+import { Row, Col, Dropdown } from 'react-bootstrap';
 
 
 const Header = ({setView, setSignedInView, ...props}) => {
