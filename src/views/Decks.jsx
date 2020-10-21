@@ -42,14 +42,14 @@ const Deck = ({openDecklist, ...props}) => {
 
   return (
     <div id="selection">
-    <div id="overlay" className="row h-100 justify-content-around align-items-center">
-        <Col id="opacity-layer" className="no-flex">
-            <Row><h3>Decklists</h3></Row>
-            <hr/>
-            {display}
-        </Col>
+        <div id="overlay" className="row h-100 justify-content-around align-items-center">
+            <Col id="opacity-layer" className="no-flex">
+                <Row><h3>Decklists</h3></Row>
+                <hr/>
+                {display}
+            </Col>
+        </div>
     </div>
-  </div>
   );
 }
 

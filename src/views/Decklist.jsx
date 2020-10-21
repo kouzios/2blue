@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
+import {Col, Row} from 'react-bootstrap';
 
 const initialLoading = <span className="loading-content">Loading Cards...</span>;
 
@@ -51,9 +52,15 @@ const Deck = ({...props}) => {
   };
 
   return (
-    <div className="container mt-5">
-        {display}
+    <div id="selection">
+    <div id="overlay" className="row h-100 justify-content-around align-items-center">
+        <Col id="opacity-layer" className="no-flex">
+            <Row><h3>{ decksInfo.id ? decksInfo.name : null }</h3></Row>
+            <hr/>
+            {display}
+        </Col>
     </div>
+  </div>
   );
 }
 
