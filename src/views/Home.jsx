@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
-import Decks from './Decks';
+import LimitedDecks from '../components/LimitedDecks';
 
 const Profile = ({openDecklist, setView, ...props}) => { 
   return (
@@ -15,7 +15,7 @@ const Profile = ({openDecklist, setView, ...props}) => {
           <Row><h3 className="clickable" onClick={() => setView("create")}>Create a deck</h3></Row>
           <hr/>
           <Row><span>Recent Decks:</span></Row>
-          <Decks openDecklist={openDecklist} total="5"/>
+          <LimitedDecks openDecklist={openDecklist} total="5"/>
           <Row><h5 className="clickable" onClick={() => setView("decks")}>View more {">"}</h5></Row>
         </Col>
       </div>

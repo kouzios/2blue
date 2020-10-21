@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import Welcome from './views/Welcome';
 import Loading from './views/Loading';
 
+
 const Routes = () => {
   const [profileInfo] = useContext(ProfileContext);
   const [signedIn] = useContext(SignedinContext);
@@ -18,14 +19,15 @@ const Routes = () => {
   const [deckID, setDeckID] = useState(null);
   const [route, setRoute] = useState(null);
   
+  const HomeComponent = () => <Home openDecklist={openDecklist} setView={setView}/>;
+
   useEffect(() => {
-    console.log("Set View: " + view)
     routing();
     //eslint-disable-next-line
   }, [view]);
 
   //On back/forward history event, change DOM accordingly
-  window.onpopstate = function(event) {
+  window.onpopstate = (event) => {
     const path = (document.location.pathname).slice(1);
     setView(path);
   }
@@ -64,24 +66,23 @@ const Routes = () => {
 
     if(view === "loading") {
       window.history.pushState("", "", '/home');
-      return <Home/>
+      return HomeComponent();
     }
   
     const params = window.location.search;
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
-      case "home": return <Home openDecklist={openDecklist} setView={setView}/>;
+      case "home": return HomeComponent();
       case "welcome": return <Welcome />
-      case "decks": return <Decks total="100" openDecklist={openDecklist}/>;
+      case "decks": return <Decks openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
       case "profile": return <Profile profileInfo={profileInfo} setView={setView}/>;
-      default: return <Home openDecklist={openDecklist} setView={setView}/>;
+      default: return HomeComponent();
     }
   }
 
   const setSignedInView = (path, params) => {
-    console.log("Set signed in view: " + path)
     //If at welcome screen, move to home screen. Else, keep status quo
     if(path === "welcome" || path === "loading" || !path) { 
       setView("home");
