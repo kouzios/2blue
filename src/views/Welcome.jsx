@@ -4,13 +4,15 @@ import { Col, Row } from 'react-bootstrap';
 const Profile = ({...props}) => { 
   return (
     <div id="background">
-      <div id="overlay" className="row h-100 justify-content-center align-items-center">
-        <Col id="opacity-layer" className="no-flex">
+      <div id="overlay" className="row h-100 align-items-center">
+        <Col id="opacity-layer">
           <Row>
-            <img className="banner-logo-hero" src="logo_long.png" alt="Banner logo"/>
-          </Row>
-          <Row>
-            <span>For however you play</span>
+            <Col className="d-flex justify-content-end" md="4">
+              <img className="logo-hero" src="logo.png" alt="Homepage site logo"/>
+            </Col>
+            <Col className="d-flex align-items-center">
+              <span id="slogan"><span className="embolden">Simplified</span> deck building</span>
+            </Col>
           </Row>
         </Col>
       </div>

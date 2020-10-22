@@ -16,14 +16,25 @@ html, body {
   cursor: not-allowed;
 }
 
+.no-flex {
+  flex-grow: 0 !important;
+}
+
 .banner-logo {
   max-width: 125px;
   max-height: 40px;
 }
 
-.banner-logo-hero {
-  max-width: 400px;
-  max-height: 100px;
+.embolden {
+  font-weight: bold;
+  color: rgba(31, 133, 192, 1);
+}
+
+/* Welcome Page */
+
+.logo-hero {
+  width: 200px;
+  height: 200px;
 }
 
 #header {
@@ -37,7 +48,7 @@ html, body {
 }
 
 #background {
-  background: linear-gradient(rgba(73, 74, 117, 0.5), rgba(0,0,0,0.8)),url("resources/background.jpg");
+  background: linear-gradient(rgba(73, 74, 117, 0.5), rgba(0,0,0,1)),url("resources/background.jpg");
   background-position: center;
 	background-repeat: no-repeat;
 	position: relative;
@@ -45,20 +56,22 @@ html, body {
   height: calc(100vh - 55px);
 }
 
-#background span {
-  font-size: 32px;
+#background #slogan {
+  font-size: 52px;
   color: white;
-  /*TODO: Change font */
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  cursor: default;
 }
 
 #background #opacity-layer {
-  background: rgba(56, 71, 107, 0.5);
-  border-radius: 15px;
+  width: 100%;
 }
 
 #background #opacity-layer .row {
   padding: 5px 10px 5px 10px;
 }
+
+/* End Welcome Page */
 
 #selection #opacity-layer {
   background: rgba(31, 133, 192, 0.8);
@@ -68,10 +81,6 @@ html, body {
 
 #selection #opacity-layer .row {
   padding: 5px 10px 5px 10px;
-}
-
-.no-flex {
-  flex-grow: 0 !important;
 }
 
 #selection {

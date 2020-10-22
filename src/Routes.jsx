@@ -41,6 +41,7 @@ const Routes = () => {
   //on any 401, send back to Welcome
   //pop state goign to decklists needs to occur multiple times which is bad
   //Only have id stored on the decklists page now
+  //pressing signout seems to do nothing sometimes?
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
