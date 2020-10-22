@@ -10,6 +10,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Welcome from './views/Welcome';
 import Loading from './views/Loading';
+import Game from './views/Game';
 
 
 const Routes = () => {
@@ -42,6 +43,7 @@ const Routes = () => {
   //pop state goign to decklists needs to occur multiple times which is bad
   //Only have id stored on the decklists page now
   //pressing signout seems to do nothing sometimes?
+  //add something else to hero page, something under maybe?
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -64,7 +66,7 @@ const Routes = () => {
       return HomeComponent();
     }
   
-    const params = window.location.search;
+    const params = view === "decklist" ? window.location.search : ""; //Only want params on decklist right now
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
       case "home": return HomeComponent();
@@ -73,6 +75,7 @@ const Routes = () => {
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
       case "profile": return <Profile profileInfo={profileInfo} setView={setView}/>;
+      case "game": return <Game setView={setView}/>
       default: return HomeComponent();
     }
   }
