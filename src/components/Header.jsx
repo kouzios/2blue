@@ -71,8 +71,9 @@ const Header = ({setView, setSignedInView, ...props}) => {
             
         const res = await fetch('/api/signin', {method:'POST', body: JSON.stringify({id_token, user})});
         if(res.status === 200) {
+            const airtableUser = await res.json()
             console.log("Authentication success");
-            setProfileInfo(user);
+            setProfileInfo(airtableUser);
             setSignedIn(true);
         } else {
             console.log("Authentication failed");

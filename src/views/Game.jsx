@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 const defaultPlayers = [
     {

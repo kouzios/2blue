@@ -1,12 +1,9 @@
-const { base } = require('../../_config/airtable');
 const formattedReturn = require('../../_config/formattedReturn');
 
-const table = base("Users");
-
-module.exports = async (fields) => {
+module.exports = async (fields, table) => {
     try {
         const user = await table.create([{ fields }]);
-        return formattedReturn(200, {});
+        return formattedReturn(200, {user});
     } catch(err) {
         console.error(err);
         return formattedReturn(500, {});

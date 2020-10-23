@@ -5,10 +5,7 @@ module.exports = async (table, deckID, userID) => {
 
   try {
     const single = (await table.select({maxRecords: 1, filterByFormula, }).firstPage())[0];
-    const formatted = {
-      ...single.fields
-    };
-    return formattedReturn(200, formatted);
+    return formattedReturn(200, {...single.fields});
   } catch (err) {
     console.error(err);
     return formattedReturn(500, {});

@@ -38,12 +38,13 @@ const Routes = () => {
   //Start a game
   //add iconography
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
-  //use google profile on login instead of storing it in DB? Or should this be changable? (Maybe a "default" or "sync" option?)
   //on any 401, send back to Welcome
   //pop state goign to decklists needs to occur multiple times which is bad
   //Only have id stored on the decklists page now
-  //pressing signout seems to do nothing sometimes?
+  //pressing signout seems to do nothing sometimes? Not even console logs are called
   //add something else to hero page, something under maybe?
+  //profile update
+
 
   const openDecklist = (id) => {
     window.history.pushState("", "", '/' + view + "?id="+id);
@@ -74,7 +75,7 @@ const Routes = () => {
       case "decks": return <Decks openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
-      case "profile": return <Profile profileInfo={profileInfo} setView={setView}/>;
+      case "profile": return <Profile setView={setView}/>;
       case "game": return <Game setView={setView}/>
       default: return HomeComponent();
     }
