@@ -43,7 +43,6 @@ const Routes = () => {
   //Only have id stored on the decklists page now
   //pressing signout seems to do nothing sometimes? Not even console logs are called
   //add something else to hero page, something under maybe?
-  //profile update
 
 
   const openDecklist = (id) => {

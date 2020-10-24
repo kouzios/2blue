@@ -50,10 +50,8 @@ const Header = ({setView, setSignedInView, ...props}) => {
 
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
-        console.log(auth2)
         auth2.signOut().then(function () {
             setSignedIn(false);
-            console.log(false)
             initiateSigninButton();
         });
     }
@@ -68,7 +66,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
             image: profile.getImageUrl(),
             name: profile.getName(),
         };
-            
+             
         const res = await fetch('/api/signin', {method:'POST', body: JSON.stringify({id_token, user})});
         if(res.status === 200) {
             const airtableUser = await res.json()
@@ -122,11 +120,9 @@ const Header = ({setView, setSignedInView, ...props}) => {
                             <Dropdown.Toggle as={ProfileImage} id="profile-image-dropdown"/>
                             <Dropdown.Menu>
                                 <Dropdown.Header>{profileInfo.name}</Dropdown.Header>
-                                <Dropdown.Item eventKey="1">
-                                    <span onClick={()=>setView("profile")}>Profile</span>
-                                </Dropdown.Item>
-                                <Dropdown.Item eventKey="2">
-                                    <span id="google-sign-out-button" onClick={signOut}>Sign Out</span>
+                                <Dropdown.Item as="button" onClick={()=>setView("profile")}><span>Profile</span></Dropdown.Item>
+                                <Dropdown.Item as="button" onClick={()=>signOut()}>
+                                    <span id="google-sign-out-button" >Sign Out</span>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

@@ -32,11 +32,11 @@ const Home = ({...props}) => {
     <div id="profile" className="container mt-5 d-flex justify-content-center align-items-center">
       <Col md={6} sm={12}>
         <Form onSubmit={(e) => handleForm(e)}>
-          <Form.Group controlID="formatTitle">
+          <Form.Group>
             <h2>Profile</h2>
           </Form.Group>
 
-          <Form.Group controlId="formatUsersName">
+          <Form.Group controlId="formatProfilePicture">
             <Form.Row className="justify-content-center disabled">
               <Form.Label>Profile Picture</Form.Label>
             </Form.Row>
