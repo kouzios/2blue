@@ -1,31 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 
-const defaultPlayers = [
-    {
-        "name": "Player 1",
-        "commander": "fblthp",
-        "status": {
-            "life": 40,
-            "poison": 0,
-            "commander_damage": [0, 0]
-        },
-        "cards": ["island"],
+const defaultLife = 40;
+
+const defaultPlayer = {
+    "name": "Player",
+    "commander": "",
+    "status": {
+        "life": defaultLife,
+        "poison": 0,
+        "commander_damage": []
     },
-    {
-        "name": "Player 2",
-        "commander": "fblthp",
-        "status": {
-            "life": 40,
-            "poison": 0,
-            "commander_damage": [0, 0]
-        },
-        "cards": ["island", "fblthp"],
-    },
-]
+    "cards": [],
+};
 
 const Profile = ({setView, ...props}) => {
-    const [players, setPlayers] = useState(defaultPlayers);
+    const [players, setPlayers] = useState([]);
     const [playersView, setPlayersView] = useState(null);
 
     useEffect(() => {
@@ -63,8 +53,33 @@ const Profile = ({setView, ...props}) => {
         );
     }
 
+    const addPlayer = () => { //TODO: Alter other players commander damage
+        const playersClone = [...players];
+        playersClone.push(defaultPlayer);
+        setPlayers(playersClone);
+    }
+
+    const hardReset = () => {
+        setPlayers([]);
+    }
+
+    const softReset = () => {//TODO: Do something about commander damage
+        const resetPlayers = players.map((player) => (defaultPlayer));
+        setPlayers(resetPlayers);
+    }
+
+    const config = () => {//TODO: Config settings like default life, # of players maybe, format type, etc
+        alert("TODO")
+    }
+
     return (
         <div id="game">
+            <Row id="control-panel" className="justify-content-center">
+                <Button onClick={()=>addPlayer()}>Add Player</Button>
+                <Button onClick={()=>softReset()}>Reset Game</Button>
+                <Button onClick={()=>hardReset()}>Hard Reset</Button>
+                <Button onClick={()=>config()}>Config</Button>
+            </Row>
             {playersView}
         </div>
     );
