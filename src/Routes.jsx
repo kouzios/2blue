@@ -30,7 +30,13 @@ const Routes = () => {
   //On back/forward history event, change DOM accordingly
   window.onpopstate = (event) => {
     const path = (document.location.pathname).slice(1);
-    setView(path);
+    if(signedIn === false) {
+      setView("welcome");
+    } else if(signedIn === true && path === "welcome") {
+      setView("home");
+    } else {
+      setView(path);
+    }
   }
 
   //TODO: Big tasks before using link in job applications
@@ -76,7 +82,7 @@ const Routes = () => {
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
       case "home": return HomeComponent();
-      case "welcome": return <Welcome />
+      case "welcome": return <Welcome />;
       case "decks": return <Decks openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck setView={setView}/>;
