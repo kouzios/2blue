@@ -133,3 +133,25 @@ html, body {
 .loading-content {
   color: lightgrey;
 }
+
+/* Control Panel Border Styling src = https://stackoverflow.com/a/46304846 */
+.text-on-pannel {
+  background: #fff none repeat scroll 0 0;
+  height: auto;
+  margin-left: 20px;
+  padding: 3px 5px;
+  position: absolute;
+  margin-top: -50px;
+}
+
+.panel {
+  /* for text on pannel */
+  margin-top: 27px !important;
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+.panel-body {
+  padding: 30px 30px 30px 30px;
+}
+/* End Control Panel Border Styling */
