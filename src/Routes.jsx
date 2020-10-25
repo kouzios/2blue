@@ -43,6 +43,7 @@ const Routes = () => {
   //Only have id stored on the decklists page now
   //pressing signout seems to do nothing sometimes? Not even console logs are called
   //add something else to hero page, something under maybe?
+  //in start game import your own deck for various usages? (Tutoring for example)
 
 
   const openDecklist = (id) => {
@@ -62,6 +63,11 @@ const Routes = () => {
     }
 
     if(view === "loading") {
+      window.history.pushState("", "", '/home');
+      return HomeComponent();
+    }
+
+    if(view === "welcome" && signedIn === true) {
       window.history.pushState("", "", '/home');
       return HomeComponent();
     }
