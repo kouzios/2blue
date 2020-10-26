@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useContext } from "react";
-import { ProfileContext } from './scripts/profile-context';
 import { SignedinContext } from './scripts/signedin-context';
 import Decks from './views/Decks';
 import Decklist from './views/Decklist';
@@ -14,7 +13,6 @@ import Game from './views/Game';
 
 
 const Routes = () => {
-  const [profileInfo] = useContext(ProfileContext);
   const [signedIn] = useContext(SignedinContext);
   const [view, setView] = useState(null);
   const [deckID, setDeckID] = useState(null);
@@ -78,7 +76,7 @@ const Routes = () => {
       return HomeComponent();
     }
   
-    const params = view === "decklist" ? window.location.search : ""; //Only want params on decklist right now
+    const params = (view === "decklist" ? window.location.search : ""); //Only want params on decklist right now
     window.history.pushState("", "", '/' + view + params);
     switch (view) {
       case "home": return HomeComponent();

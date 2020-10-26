@@ -10,8 +10,8 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
     const [signedIn, setSignedIn] = useContext(SignedinContext);
-    const [initialPath, setInitialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
-    const [initialID, setInitialID] = useState(window.location.search);
+    const [initialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
+    const [initialID] = useState(window.location.search);
     const [timer, setTimer] = useState(null);
 
     useEffect(() => {

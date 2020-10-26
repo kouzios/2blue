@@ -12,6 +12,7 @@ const Home = ({...props}) => {
     if(disabled === true) {
       setName(profileInfo.name);
     }
+    //eslint-disable-next-line
   }, [disabled])
 
   const handleForm = async (event) => {
