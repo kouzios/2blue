@@ -157,9 +157,9 @@ html, body {
 /* End Control Panel Border Styling */
 
 .custom-panel {
-  max-width: 600px;
+  max-width: 600px !important;
   max-height: 600px;
-  margin-bottom: 75px;;
+  margin-bottom: 75px;
 }
 
 .custom-panel .contents {
