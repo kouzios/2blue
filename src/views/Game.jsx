@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import CustomPanel from '../components/CustomPanel';
-import { Card, Col, Button } from 'react-bootstrap';
+import { Row, Card, Col, Button } from 'react-bootstrap';
 
 const defaultLife = 40;
 
@@ -75,26 +75,33 @@ const Profile = ({setView, ...props}) => {
 
     return (
         <div id="game">
-            <CustomPanel title="Control Panel">
-                <Button onClick={()=>addPlayer()}>Add Player</Button>
-                <Button onClick={()=>softReset()}>Reset Game</Button>
-                <Button onClick={()=>hardReset()}>Hard Reset</Button>
-                <Button onClick={()=>config()}>Config</Button>
-            </CustomPanel>
-            
-            <CustomPanel title="Library">
-                <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
-            </CustomPanel>
+            <Row className="justify-content-center">
+                <CustomPanel md={6} title="Control Panel">
+                    <Button onClick={()=>addPlayer()}>Add Player</Button>
+                    <Button onClick={()=>softReset()}>Reset Game</Button>
+                    <Button onClick={()=>hardReset()}>Hard Reset</Button>
+                    <Button onClick={()=>config()}>Config</Button>
+                </CustomPanel>
+            </Row>
 
-            <CustomPanel title="Graveyard">
-                <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
-                <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
-            </CustomPanel>
+            <Row className="ml-2 mr-2 justify-content-around">
+                <CustomPanel md={6} title="Library">
+                    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>
+                </CustomPanel>
+
+                <CustomPanel md={6} title="Graveyard">
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>
+                </CustomPanel>
+            </Row>
             {playersView}
         </div>
     );

@@ -155,3 +155,16 @@ html, body {
   padding: 30px 30px 30px 30px;
 }
 /* End Control Panel Border Styling */
+
+.custom-panel {
+  max-width: 600px;
+  max-height: 600px;
+  margin-bottom: 75px;;
+}
+
+.custom-panel .contents {
+  max-width: 575px;
+  max-height: 575px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
