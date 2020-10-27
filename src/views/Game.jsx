@@ -1,22 +1,23 @@
 import React, {useState} from 'react';
 import CustomPanel from '../components/CustomPanel';
+import MTGCard from '../components/MTGCard';
 import { Row, Card, Button } from 'react-bootstrap';
 
 const defaultBoard = [
-    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="logo.png" alt="temp"/></Card>,
+    <MTGCard title="Counterspell"/>,
+    <MTGCard title="Reclamation Sage"/>,
+    <MTGCard title="Wood Elves"/>,
+    <MTGCard title="LLanowar Elves"/>,
 ]
 
 const defaultGraveyard = [
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
-    <Card><img style={{"height": "250px","width":"150px"}}src="github.png" alt="temp"/></Card>,
+    <MTGCard title="Demonic Tutor"/>,
+    <MTGCard title="Opt"/>,
+    <MTGCard title="Search for Azcanta"/>,
+    <MTGCard title="Vances Blasting Cannons"/>,
+    <MTGCard title="Sol Ring"/>,
+    <MTGCard title="Command Tower"/>,
+    <MTGCard title="Commanders Sphere"/>,
 ]
 
 const Profile = ({setView, ...props}) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import LimitedDecks from '../components/LimitedDecks';
 
-const gameText = "Starting a game allows you to store life totals, cards, and special effects during a game of Magic: The Gathering";
+const gameText = "Starting a game allows you to cards on the board and in players graveyards during a game of Magic: The Gathering";
 
 const Profile = ({openDecklist, setView, ...props}) => { 
   return (

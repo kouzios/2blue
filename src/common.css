@@ -168,3 +168,8 @@ html, body {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.mtg {
+  height: 204px;
+  width: 146px;
+}
