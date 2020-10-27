@@ -9,15 +9,11 @@ const MTGCard = ({title, ...props}) => {
     }, [])
 
     const getCard = async () => {
-        const URL = 'https://api.scryfall.com/cards/named?exact=' + title + '&format=image';
-        var Origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+        // var Origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
         
-        const res = await fetch(
-            URL, 
-            {Origin, cache: "force-cache"}
-        );
-
-        setImageURL(res.url);
+        const res = await fetch('/api/cards?title=' + title);
+        const img = await res.json()
+        setImageURL(img);
     }
 
     return(
