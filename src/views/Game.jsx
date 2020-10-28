@@ -1,31 +1,35 @@
 import React, {useState} from 'react';
 import CustomPanel from '../components/CustomPanel';
 import MTGCard from '../components/MTGCard';
-import { Row, Card, Button } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
 
-const defaultBoard = [
-    <MTGCard title="Counterspell"/>,
-    <MTGCard title="Reclamation Sage"/>,
-    <MTGCard title="Wood Elves"/>,
-    <MTGCard title="LLanowar Elves"/>,
+const defaultBoard = [//TODO: Store using cookies?
+    
 ]
 
-const defaultGraveyard = [
-    <MTGCard title="Demonic Tutor"/>,
-    <MTGCard title="Opt"/>,
-    <MTGCard title="Search for Azcanta"/>,
-    <MTGCard title="Vances Blasting Cannons"/>,
-    <MTGCard title="Sol Ring"/>,
-    <MTGCard title="Command Tower"/>,
-    <MTGCard title="Commanders Sphere"/>,
+const defaultGraveyard = [//TODO: Store using cookies?
+    
 ]
 
 const Profile = ({setView, ...props}) => {
     const [board, setBoard] = useState(defaultBoard);
     const [graveyard, setGraveyard] = useState(defaultGraveyard);
 
-    const addCard = () => {
-        alert("TODO")
+    const addCard = async (title) => {
+        const cardName = prompt("What card would you like to add to " + title + "?");
+        const res = await fetch("/api/cards?title=" + cardName, {method: "POST"});
+        const cardInfo = await res.json();
+        if(cardInfo.name) {
+            if(title === "Board") {
+                let clone = [...board];
+                clone.push(<MTGCard title={cardInfo.name}/>);
+                setBoard(clone);
+            } else {
+                let clone = [...graveyard];
+                clone.push(<MTGCard title={cardInfo.name}/>);
+                setGraveyard(clone);
+            }
+        }
     }
 
     const hardReset = () => {
@@ -41,18 +45,17 @@ const Profile = ({setView, ...props}) => {
         <div id="game">
             <Row className="justify-content-center">
                 <CustomPanel md={6} title="Control Panel">
-                    <Button onClick={()=>addCard()}>Add Card</Button>
                     <Button onClick={()=>hardReset()}>Hard Reset</Button>
                     <Button onClick={()=>config()}>Config</Button>
                 </CustomPanel>
             </Row>
 
             <Row className="ml-2 mr-2 justify-content-around">
-                <CustomPanel md={6} title="Board">
+                <CustomPanel addable addCard={addCard} md={6} title="Board">
                     {board}
                 </CustomPanel>
 
-                <CustomPanel md={6} title="Graveyard">
+                <CustomPanel addable addCard={addCard} md={6} title="Graveyard">
                    {graveyard}
                 </CustomPanel>
             </Row>

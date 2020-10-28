@@ -7,6 +7,8 @@ module.exports = async (event, cards) => {
 
   if (event.httpMethod === 'GET') {
     return await getImage(param);
+  } else if(event.httpMethod === 'POST') {
+    return await getOne(param, cards);
   } else {
     return formattedReturn(405, {});
   }
