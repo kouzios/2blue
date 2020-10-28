@@ -11,6 +11,7 @@ const CreateDeck = ({...props}) => {
     const [currentCard, setCurrentCard] = useState(CURRENT_CARD_DEFAULT);
     const [type, setType] = useState("EDH");
     const [name, setName] = useState("");
+    const [addCardMessage, setAddCardMessage] = useState("");
 
     useEffect(() => {
         setDisplayCards(cardsToPlaintext());
@@ -23,7 +24,8 @@ const CreateDeck = ({...props}) => {
         )
     }
 
-    const addCard = async () => { //TODO: Validation message
+    const addCard = async () => {
+        setAddCardMessage("");
         if(currentCard.name && currentCard.quantity > 0) {
             const res = await fetch("/api/cards?title=" + currentCard.name, {method: "POST"});
             const cardInfo = await res.json();
@@ -31,17 +33,16 @@ const CreateDeck = ({...props}) => {
                 let clone = [...cards];
                 clone.push({name: cardInfo.name, quantity: currentCard.quantity});
                 setCards(clone);
+                setCurrentCard(CURRENT_CARD_DEFAULT);
             } else {
-                //TODO: Validation message
+                setAddCardMessage("Card not found");
             }
-            setCurrentCard(CURRENT_CARD_DEFAULT);
         }
         
     }
 
     const handleForm = async (event) => {
         event.preventDefault(); //Prevent form submission
-        //TODO: Check if valid and all that
         const body = { name, cards, type };
         await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
     }
@@ -83,6 +84,16 @@ const CreateDeck = ({...props}) => {
                             <Form.Control type="number" onChange={(e)=>setCurrentCard({name:currentCard.name, quantity:e.target.value})} value={currentCard.quantity}/>
                         </Form.Group>
                     </Form.Row>
+
+                    <Form.Row>
+                        <Form.Group as={Col} md={10} controlId="formCardText">
+                            <Form.Text id="addCardText">
+                                {addCardMessage}
+                            </Form.Text>
+                        </Form.Group>
+                    </Form.Row>
+
+                    
                     
                     <Form.Group controlId="formCardArea">
                         <Form.Label>Deck List ({cards.length})</Form.Label>

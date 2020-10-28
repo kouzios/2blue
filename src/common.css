@@ -173,3 +173,7 @@ html, body {
   height: 204px;
   width: 146px;
 }
+
+#addCardText {
+  color: red;
+}
