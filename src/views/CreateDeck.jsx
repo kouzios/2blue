@@ -23,11 +23,17 @@ const CreateDeck = ({...props}) => {
         )
     }
 
-    const addCard = () => { //TODO: Validation message
+    const addCard = async () => { //TODO: Validation message
         if(currentCard.name && currentCard.quantity > 0) {
-            let clone = [...cards];
-            clone.push(currentCard);
-            setCards(clone);
+            const res = await fetch("/api/cards?title=" + currentCard.name, {method: "POST"});
+            const cardInfo = await res.json();
+            if(cardInfo.name) {
+                let clone = [...cards];
+                clone.push({name: cardInfo.name, quantity: currentCard.quantity});
+                setCards(clone);
+            } else {
+                //TODO: Validation message
+            }
             setCurrentCard(CURRENT_CARD_DEFAULT);
         }
         
@@ -41,53 +47,55 @@ const CreateDeck = ({...props}) => {
     }
 
     return (
-        <div className="container mt-5">
-            <h2>Create a deck</h2>
-            <Form onSubmit={(e) => handleForm(e)}>
-                <Form.Row>
-                    <Form.Group as={Col} md={10} controlId="formDeckName">
-                        <Form.Label>Deck Name</Form.Label>
-                        <Form.Control type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter deck name"/>
-                    </Form.Group>
-                    <Form.Group as={Col} md={2} controlId="formDeckType">
-                        <Form.Label>Deck Type</Form.Label>
-                        <Form.Control as="select" onChange={(e)=>setType(e.target.value)} value={type}>
-                            <option>EDH</option>
-                            <option>Brawl</option>
-                            <option>Standard</option>
-                            <option>Modern</option>
-                            <option>Legacy</option>
-                            <option>Vintage</option>
-                            <option>Pauper</option>
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
+        <div className="container mt-5 d-flex justify-content-center align-items-center">
+            <Col md={8} sm={12}>
+                <h2>Create a deck</h2>
+                <Form onSubmit={(e) => handleForm(e)}>
+                    <Form.Row>
+                        <Form.Group as={Col} md={10} controlId="formDeckName">
+                            <Form.Label>Deck Name</Form.Label>
+                            <Form.Control type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter deck name" autoComplete="off"/>
+                        </Form.Group>
+                        <Form.Group as={Col} md={2} controlId="formDeckType">
+                            <Form.Label>Deck Type</Form.Label>
+                            <Form.Control as="select" onChange={(e)=>setType(e.target.value)} value={type}>
+                                <option>EDH</option>
+                                <option>Brawl</option>
+                                <option>Standard</option>
+                                <option>Modern</option>
+                                <option>Legacy</option>
+                                <option>Vintage</option>
+                                <option>Pauper</option>
+                            </Form.Control>
+                        </Form.Group>
+                    </Form.Row>
 
-                <hr/>
+                    <hr/>
 
-                <Form.Row>
-                    <Form.Group as={Col} md={10} controlId="formCardname">
-                        <Form.Label>Card Name</Form.Label>
-                        <Form.Control type="text" onChange={(e)=>setCurrentCard({name:e.target.value, quantity:currentCard.quantity})} value={currentCard.name} />
-                        <Button variant="secondary" onClick={()=>addCard()}> Add Card</Button>
+                    <Form.Row>
+                        <Form.Group as={Col} md={10} controlId="formCardname">
+                            <Form.Label>Card Name</Form.Label>
+                            <Form.Control type="text" onChange={(e)=>setCurrentCard({name:e.target.value, quantity:currentCard.quantity})} value={currentCard.name} autoComplete="off"/>
+                            <Button variant="secondary" onClick={()=>addCard()}> Add Card</Button>
+                        </Form.Group>
+                        <Form.Group as={Col} md={2} controlId="formCardnum">
+                            <Form.Label>How Many?</Form.Label>
+                            <Form.Control type="number" onChange={(e)=>setCurrentCard({name:currentCard.name, quantity:e.target.value})} value={currentCard.quantity}/>
+                        </Form.Group>
+                    </Form.Row>
+                    
+                    <Form.Group controlId="formCardArea">
+                        <Form.Label>Deck List ({cards.length})</Form.Label>
+                        <Form.Control className="disabled" disabled as="textarea" rows="10" onChange={() => console.log("Unable to update textarea, disabled")} value={displayCards}/> 
                     </Form.Group>
-                    <Form.Group as={Col} md={2} controlId="formCardnum">
-                        <Form.Label>How Many?</Form.Label>
-                        <Form.Control type="number" onChange={(e)=>setCurrentCard({name:currentCard.name, quantity:e.target.value})} value={currentCard.quantity}/>
-                    </Form.Group>
-                </Form.Row>
-                
-                <Form.Group controlId="formCardArea">
-                    <Form.Label>Deck List ({cards.length})</Form.Label>
-                    <Form.Control className="disabled" disabled as="textarea" rows="10" onChange={() => console.log("Unable to update textarea, disabled")} value={displayCards}/> 
-                </Form.Group>
 
-                <hr/>
+                    <hr/>
 
-                <Button variant="primary" type="submit">
-                    Create Deck
-                </Button>
-            </Form>
+                    <Button variant="primary" type="submit">
+                        Create Deck
+                    </Button>
+                </Form>
+            </Col>
         </div>
     );
 }
