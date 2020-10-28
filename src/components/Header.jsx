@@ -71,7 +71,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
         if(res.status === 200) {
             const airtableUser = await res.json()
             console.log("Authentication success");
-            setProfileInfo(airtableUser);
+            setProfileInfo(user);
             setSignedIn(true);
         } else {
             console.log("Authentication failed");

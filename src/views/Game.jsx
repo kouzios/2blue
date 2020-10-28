@@ -22,11 +22,11 @@ const Profile = ({setView, ...props}) => {
         if(cardInfo.name) {
             if(title === "Board") {
                 let clone = [...board];
-                clone.push(<MTGCard title={cardInfo.name}/>);
+                clone.push(<MTGCard key={title+cardInfo.name+clone.length} title={cardInfo.name}/>);
                 setBoard(clone);
             } else {
                 let clone = [...graveyard];
-                clone.push(<MTGCard title={cardInfo.name}/>);
+                clone.push(<MTGCard key={title+cardInfo.name+clone.length} title={cardInfo.name}/>);
                 setGraveyard(clone);
             }
         }
