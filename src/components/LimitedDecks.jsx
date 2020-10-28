@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
 
 const initialLoading = <span className="loading-content">Loading Decks...</span>;
+const noDecks = <span className="loading-content">No Decks Found</span>;
 
 const Deck = ({total, openDecklist, ...props}) => {
   const [userID] = useContext(IDContext);
@@ -33,6 +34,8 @@ const Deck = ({total, openDecklist, ...props}) => {
           }
         });
         setDisplay(mapped);
+      } else {
+        setDisplay(noDecks);
       }
   }
 
