@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
+import MTGCard from '../components/MTGCard';
 import { IDContext } from '../scripts/id-context';
-import {Col, Row} from 'react-bootstrap';
+import { Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
 
 const initialLoading = <span className="loading-content">Loading Cards...</span>;
 
@@ -24,14 +25,26 @@ const Deck = ({...props}) => {
       // eslint-disable-next-line
   }, [decksInfo]);
 
+  const renderTooltip = (card) => (
+    <Tooltip>
+      <MTGCard title={card.name}/>
+    </Tooltip>
+  )
+
   const formatDecks = () => {
     let deck = [];
     if(decksInfo.id != null) {
       deck = JSON.parse(decksInfo.cards);
       let mapped = deck.map((card, index) => (
-          <div key={"card"+index}>
-              {card.quantity}x {card.name}
-          </div>
+        <Row key={"card"+index}>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(card)}
+          >
+            <span>{card.quantity}x {card.name}</span>
+          </OverlayTrigger>
+        </Row>
       ));
       setDisplay(mapped);
     }

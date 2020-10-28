@@ -46,7 +46,7 @@ const Profile = ({setView, ...props}) => {
             <Row className="justify-content-center">
                 <CustomPanel md={6} title="Control Panel">
                     <Button onClick={()=>hardReset()}>Hard Reset</Button>
-                    <Button onClick={()=>config()}>Config</Button>
+                    <Button className="disabled" disabled onClick={()=>config()}>Config</Button>
                 </CustomPanel>
             </Row>
 
