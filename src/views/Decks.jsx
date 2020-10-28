@@ -3,6 +3,7 @@ import { IDContext } from '../scripts/id-context';
 import {Col, Row} from 'react-bootstrap';
 
 const initialLoading = <span className="loading-content">Loading Decks...</span>;
+const noDecks = <span className="loading-content">No Decks Found</span>;
 
 const Deck = ({openDecklist, ...props}) => {
   const [userID] = useContext(IDContext);
@@ -27,6 +28,8 @@ const Deck = ({openDecklist, ...props}) => {
             </Row>
         ));
         setDisplay(mapped);
+      } else {
+        setDisplay(noDecks);
       }
   }
 

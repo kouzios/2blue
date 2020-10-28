@@ -4,6 +4,7 @@ import { IDContext } from '../scripts/id-context';
 import { Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
 
 const initialLoading = <span className="loading-content">Loading Cards...</span>;
+const noDecks = <span className="loading-content">No Decks Found</span>;
 
 const Deck = ({...props}) => {
   const [userID] = useContext(IDContext);
@@ -47,6 +48,8 @@ const Deck = ({...props}) => {
         </Row>
       ));
       setDisplay(mapped);
+    } else {
+      setDisplay(noDecks);
     }
   }
 
