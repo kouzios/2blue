@@ -17,7 +17,7 @@ const Profile = ({setView, ...props}) => {
         let clone = [...board];
         const location = "board";
         clone = clone.map((card, index) => (
-            <MTGCard removeCard={()=>removeCard(location, card)} key={location+card+index} title={card}/>
+            <MTGCard removeCard={(status)=>removeCard(location, card, status)} key={location+card+index} title={card}/>
         ));
         setDisplayBoard(clone);
     }, [board]);
@@ -26,12 +26,23 @@ const Profile = ({setView, ...props}) => {
         let clone = [...graveyard];
         const location = "graveyard";
         clone = clone.map((card, index) => (
-            <MTGCard removeCard={()=>removeCard(location, card)} key={location+card+index} title={card}/>
+            <MTGCard removeCard={(status)=>removeCard(location, card, status)} key={location+card+index} title={card}/>
         ));
         setDisplayGraveyard(clone);
     }, [graveyard]);
 
-    const removeCard = (location, cardName) => {
+    const removeCard = (location, cardName, optionalStatus) => {
+        if(optionalStatus) {
+            switch(optionalStatus) {
+                case 404:
+                    alert("Error, card does not exist in Scryfall's database");
+                    break;
+                default:
+                    alert(optionalStatus + " error: From TwoBlue's server");
+                    break;
+            }
+                
+        }
         if(location === "board") { 
             let clone = new Set([...board]);
             clone.delete(cardName);
@@ -46,22 +57,16 @@ const Profile = ({setView, ...props}) => {
     }
 
     const addCard = async (location) => {
-        const cardName = prompt("What card would you like to add to " + location + "?");
-        const res = await fetch("/api/cards?title=" + cardName, {method: "POST"});
+        const cardName = prompt("What card would you like to add to " + location.toUpperCase() + "?");
 
-        const cardInfo = await res.json();
-        const officialCardName = cardInfo.name;
-
-        if(officialCardName) {
+        if(cardName) {
             if(location === "board") {
-                setBoard(prevBoard => new Set([...board, officialCardName]));
+                setBoard(new Set([...board, cardName]));
             } else if(location === "graveyard") {
-                setGraveyard(prevGraveyard => new Set([...graveyard, officialCardName]));
+                setGraveyard(new Set([...graveyard, cardName]));
             } else {
                 alert("Invalid card insert location");
             }
-        } else {
-            alert("Invalid Cardname");
         }
     }
 

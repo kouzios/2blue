@@ -46,6 +46,11 @@ const Routes = () => {
   //add something else to hero page, something under maybe?
   //in start game import your own deck for various usages? (Tutoring for example)
   //Make add card immediately add, then remove if not valid?
+  //hover card to see larger
+  //img flipping
+  //config
+  //store saved cards via cookie
+  //change alert error handling to state-based
 
 
   const openDecklist = (id) => {

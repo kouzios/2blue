@@ -1,12 +1,14 @@
 const formattedReturn = require('../../_config/formattedReturn');
 const fetch = require("node-fetch");
-const fileType = require('file-type');
 
 module.exports = async (param) => {
     const cardName = param.title;
 
     try {
         const res = await fetch('https://api.scryfall.com/cards/named?exact=' + cardName);
+        if(res.status !== 200 ){
+            return formattedReturn(res.status, {});
+        }
         const json = await res.json();
         const faces = json.card_faces;
         let image = null;

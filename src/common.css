@@ -170,8 +170,8 @@ html, body {
 }
 
 .mtg {
-  height: 204px;
-  width: 146px;
+  height: 204px !important;
+  width: 146px !important;
 }
 
 .mtg .delete {

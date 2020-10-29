@@ -8,18 +8,21 @@ const MTGCard = ({removeCard, title, ...props}) => {
         getCard();
     }, [])
 
-    const getCard = async () => {
-        // var Origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
-        
+    const getCard = async () => {        
         const res = await fetch('/api/cards?title=' + title);
+        const status = res.status;
+        if(status !== 200) { //Delete card if invalid
+            removeCard(status);
+            return;
+        }
         const img = await res.json()
         setImageURL(img);
     }
 
     return(
         <Card className="mtg">
-            <img className="mtg" src={imageURL} alt={title}/>
-            <Button className="delete" variant="danger" onClick={()=>removeCard()}>X</Button>
+            <img src={imageURL} alt={title}/>
+            <Button className="delete" variant="danger" onClick={removeCard}>X</Button>
         </Card>
     )
 }
