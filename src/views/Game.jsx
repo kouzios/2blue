@@ -1,38 +1,72 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomPanel from '../components/CustomPanel';
 import MTGCard from '../components/MTGCard';
 import { Row, Button } from 'react-bootstrap';
 
-const defaultBoard = [//TODO: Store using cookies?
-    
-]
-
-const defaultGraveyard = [//TODO: Store using cookies?
-    
-]
+//TODO: Store using cookies?
+const defaultBoard = new Set();
+const defaultGraveyard = new Set();
 
 const Profile = ({setView, ...props}) => {
     const [board, setBoard] = useState(defaultBoard);
+    const [displayBoard, setDisplayBoard] = useState(null);
     const [graveyard, setGraveyard] = useState(defaultGraveyard);
+    const [displayGraveyard, setDisplayGraveyard] = useState(null);
 
-    const addCard = async (title) => {
-        const cardName = prompt("What card would you like to add to " + title + "?");
+    useEffect(() => {
+        let clone = [...board];
+        const location = "board";
+        clone = clone.map((card, index) => (
+            <MTGCard removeCard={()=>removeCard(location, card)} key={location+card+index} title={card}/>
+        ));
+        setDisplayBoard(clone);
+    }, [board]);
+    
+    useEffect(() => {
+        let clone = [...graveyard];
+        const location = "graveyard";
+        clone = clone.map((card, index) => (
+            <MTGCard removeCard={()=>removeCard(location, card)} key={location+card+index} title={card}/>
+        ));
+        setDisplayGraveyard(clone);
+    }, [graveyard]);
+
+    const removeCard = (location, cardName) => {
+        if(location === "board") { 
+            let clone = new Set([...board]);
+            clone.delete(cardName);
+            setBoard(clone);
+        } else if(location === "graveyard") {
+            let clone = new Set([...graveyard]);
+            clone.delete(cardName);
+            setGraveyard(cardName);
+        } else {
+            alert("Failed to remove card");
+        }
+    }
+
+    const addCard = async (location) => {
+        const cardName = prompt("What card would you like to add to " + location + "?");
         const res = await fetch("/api/cards?title=" + cardName, {method: "POST"});
+
         const cardInfo = await res.json();
-        if(cardInfo.name) {
-            if(title === "Board") {
-                let clone = [...board];
-                clone.push(<MTGCard key={title+cardInfo.name+clone.length} title={cardInfo.name}/>);
-                setBoard(clone);
+        const officialCardName = cardInfo.name;
+
+        if(officialCardName) {
+            if(location === "board") {
+                setBoard(prevBoard => new Set([...board, officialCardName]));
+            } else if(location === "graveyard") {
+                setGraveyard(prevGraveyard => new Set([...graveyard, officialCardName]));
             } else {
-                let clone = [...graveyard];
-                clone.push(<MTGCard key={title+cardInfo.name+clone.length} title={cardInfo.name}/>);
-                setGraveyard(clone);
+                alert("Invalid card insert location");
             }
+        } else {
+            alert("Invalid Cardname");
         }
     }
 
     const hardReset = () => {
+        console.log("RESETTING")
         setBoard(defaultBoard);
         setGraveyard(defaultGraveyard);
     }
@@ -45,18 +79,18 @@ const Profile = ({setView, ...props}) => {
         <div id="game">
             <Row className="justify-content-center">
                 <CustomPanel md={6} title="Control Panel">
-                    <Button onClick={()=>hardReset()}>Hard Reset</Button>
-                    <Button className="disabled" disabled onClick={()=>config()}>Config</Button>
+                    <Button onClick={hardReset}>Hard Reset</Button>
+                    <Button className="disabled" disabled onClick={config}>Config</Button>
                 </CustomPanel>
             </Row>
 
             <Row className="ml-2 mr-2 justify-content-around">
-                <CustomPanel addable addCard={addCard} md={6} title="Board">
-                    {board}
+                <CustomPanel addable addCard={addCard} md={6} title="board">
+                    {displayBoard}
                 </CustomPanel>
 
-                <CustomPanel addable addCard={addCard} md={6} title="Graveyard">
-                   {graveyard}
+                <CustomPanel addable addCard={addCard} md={6} title="graveyard">
+                   {displayGraveyard}
                 </CustomPanel>
             </Row>
         </div>

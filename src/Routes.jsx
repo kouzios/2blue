@@ -39,15 +39,13 @@ const Routes = () => {
 
   //TODO: Big tasks before using link in job applications
   //at least slightly fix mobile
-  //Start a game
   //add iconography
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //on any 401, send back to Welcome
   //pop state goign to decklists needs to occur multiple times which is bad
-  //Only have id stored on the decklists page now
-  //pressing signout seems to do nothing sometimes? Not even console logs are called
   //add something else to hero page, something under maybe?
   //in start game import your own deck for various usages? (Tutoring for example)
+  //Make add card immediately add, then remove if not valid?
 
 
   const openDecklist = (id) => {

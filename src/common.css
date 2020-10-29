@@ -174,6 +174,19 @@ html, body {
   width: 146px;
 }
 
+.mtg .delete {
+  position: relative;
+  top: -13em;
+  left: 7em;
+  width: 35px;
+  height: 35px;
+  visibility: hidden;
+}
+
+.mtg:hover .delete {
+  visibility: visible;
+}
+
 #addCardText {
   color: red;
 }

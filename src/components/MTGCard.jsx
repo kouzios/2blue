@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Card} from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Card } from 'react-bootstrap';
 
-const MTGCard = ({title, ...props}) => {
+const MTGCard = ({removeCard, title, ...props}) => {
     const [imageURL, setImageURL] = useState(null);
 
     useEffect(() => {
@@ -19,6 +19,7 @@ const MTGCard = ({title, ...props}) => {
     return(
         <Card className="mtg">
             <img className="mtg" src={imageURL} alt={title}/>
+            <Button className="delete" variant="danger" onClick={()=>removeCard()}>X</Button>
         </Card>
     )
 }
