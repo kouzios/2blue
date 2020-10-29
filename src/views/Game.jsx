@@ -32,7 +32,8 @@ const Profile = ({setView, ...props}) => {
     }, [graveyard]);
 
     const removeCard = (location, cardName, optionalStatus) => {
-        if(optionalStatus) {
+        //If we have a status code (from adding, getting a status code, then removing as a result) then...
+        if(optionalStatus && typeof(optionalStatus) === 'number') {
             switch(optionalStatus) {
                 case 404:
                     alert("Error, card does not exist in Scryfall's database");
