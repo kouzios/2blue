@@ -60,10 +60,12 @@ const Profile = ({setView, ...props}) => {
         const cardName = prompt("What card would you like to add to " + location.toUpperCase() + "?");
 
         if(cardName) {
+            //Convert to lowercase, no special characters to ensure consistency for the Set preventing duplicates
+            const condensedCardName = (cardName.toLowerCase()).replace(/[^\w\s]/gi, '');
             if(location === "board") {
-                setBoard(new Set([...board, cardName]));
+                setBoard(new Set([...board, condensedCardName]));
             } else if(location === "graveyard") {
-                setGraveyard(new Set([...graveyard, cardName]));
+                setGraveyard(new Set([...graveyard, condensedCardName]));
             } else {
                 alert("Invalid card insert location");
             }
