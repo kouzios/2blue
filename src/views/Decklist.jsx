@@ -43,7 +43,7 @@ const Deck = ({...props}) => {
             delay={{ show: 250, hide: 400 }}
             overlay={renderTooltip(card)}
           >
-            <span>{card.quantity}x {card.name}</span>
+            <span className="default">{card.quantity}x {card.name}</span>
           </OverlayTrigger>
         </Row>
       ));

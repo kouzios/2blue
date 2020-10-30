@@ -16,6 +16,10 @@ html, body {
   cursor: not-allowed;
 }
 
+.default {
+  cursor: default;
+}
+
 .no-flex {
   flex-grow: 0 !important;
 }

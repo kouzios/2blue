@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Table, Button, Form, Col, Row } from "react-bootstrap";
+import { Tooltip, OverlayTrigger, Button, Form, Col, Row } from "react-bootstrap";
 import { IDContext } from "../scripts/id-context";
+import MTGCard from '../components/MTGCard';
+
 
 const CURRENT_CARD_DEFAULT = { name: "", quantity: "1" };
 const CARDS_DEFAULT = new Map();
@@ -24,7 +26,13 @@ const CreateDeck = ({ ...props }) => {
     let clone = new Map([...cards]);
     clone.delete(name);
     setCards(clone);
-  };
+	};
+	
+	const renderTooltip = (name) => (
+    <Tooltip>
+      <MTGCard title={name}/>
+    </Tooltip>
+  )
 
   const CardRow = (name, quantity, index) => (
     <Row key={quantity + name + index}>
@@ -36,7 +44,15 @@ const CreateDeck = ({ ...props }) => {
       <Col className="quantity" md="1">
         {quantity}
       </Col>
-      <Col className="name">{name}</Col>
+      <Col className="name">
+				<OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(name)}
+          >
+						<span className="default">{name}</span>
+				</OverlayTrigger>
+			</Col>
     </Row>
   );
 
