@@ -92,7 +92,7 @@ const Game = ({setView, ...props}) => {
                 </CustomPanel>
             </Row>
 
-            <Row className="ml-2 mr-2">
+            <Row className="ml-2 mr-2 justify-content-around">
                 <CustomPanel addable addCard={addCard} md={6} title="board">
                     {displayBoard}
                 </CustomPanel>

@@ -12,6 +12,7 @@ const CreateDeck = ({...props}) => {
     const [type, setType] = useState("EDH");
     const [name, setName] = useState("");
     const [addCardMessage, setAddCardMessage] = useState("");
+    const [deckNameMessage, setDeckNameMessage] = useState("");
 
     useEffect(() => {
         setDisplayCards(cardsToPlaintext());
@@ -41,9 +42,17 @@ const CreateDeck = ({...props}) => {
         
     }
 
-    const handleForm = async (event) => {
+    const handleForm = (event) => {
         event.preventDefault(); //Prevent form submission
+    }
+
+    const createDeck = async (event) => {
+        setDeckNameMessage("");
         const body = { name, cards, type };
+        if(name === "") {
+            setDeckNameMessage("Please fill in deck name");
+            return;
+        }
         await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
     }
 
@@ -71,6 +80,14 @@ const CreateDeck = ({...props}) => {
                         </Form.Group>
                     </Form.Row>
 
+                    <Form.Row>
+                        <Form.Group as={Col} md={10} controlId="formCardText">
+                            <Form.Text className="badMessage">
+                                {deckNameMessage}
+                            </Form.Text>
+                        </Form.Group>
+                    </Form.Row>
+
                     <hr/>
 
                     <Form.Row>
@@ -87,7 +104,7 @@ const CreateDeck = ({...props}) => {
 
                     <Form.Row>
                         <Form.Group as={Col} md={10} controlId="formCardText">
-                            <Form.Text id="addCardText">
+                            <Form.Text className="badMessage">
                                 {addCardMessage}
                             </Form.Text>
                         </Form.Group>
@@ -102,7 +119,7 @@ const CreateDeck = ({...props}) => {
 
                     <hr/>
 
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" onClick={createDeck}>
                         Create Deck
                     </Button>
                 </Form>

@@ -185,6 +185,6 @@ html, body {
   visibility: visible;
 }
 
-#addCardText {
+.badMessage {
   color: red;
 }
