@@ -1,12 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { Button, Form, Col} from 'react-bootstrap';
+import React, { useState, useEffect, useContext } from 'react';
+import { Table, Button, Form, Col } from 'react-bootstrap';
 import { IDContext } from '../scripts/id-context';
 
 const CURRENT_CARD_DEFAULT = {name:"", quantity:'1'};
+const CARDS_DEFAULT = new Map();
 
-const CreateDeck = ({...props}) => {
+const CreateDeck = ({ ...props }) => {
     const [userID] = useContext(IDContext);
-    const [cards, setCards] = useState([]); //TODO: Removable entries
+    const [cards, setCards] = useState(CARDS_DEFAULT);
     const [displayCards, setDisplayCards] = useState("");
     const [currentCard, setCurrentCard] = useState(CURRENT_CARD_DEFAULT);
     const [type, setType] = useState("EDH");
@@ -19,20 +20,51 @@ const CreateDeck = ({...props}) => {
         //eslint-disable-next-line
     }, [cards])
 
-    const cardsToPlaintext = () => {
-        return (
-            cards.map((card)=>(card.quantity+"x "+card.name)).join("\n")
-        )
+    const deleteCard = (name) => {
+        let clone = new Map([...cards]);
+        clone.delete(name);
+        setCards(clone);
+    }
+
+    const CardRow = (name, quantity, index) => (
+        <tr key={quantity+name+index}>
+            <td md="2">
+                <Button variant="danger" onClick={()=>deleteCard(name)}>DELETE</Button>
+            </td>
+            <td>
+                {quantity}
+            </td>
+            <td>
+                {name}
+            </td>
+        </tr>
+    )
+
+    const cardsToPlaintext = () => (
+        [...cards].map((card, index) => (
+            CardRow(card[0], card[1], index)
+        ))
+    )
+
+    //Our JSON object for MTG cards requires a format such as "Sol Ring" not "sol ring", so we convert it thusly
+    const capitalizeEachFirstLetter = (phrase) => {
+        let words = phrase.toLowerCase();
+        words = words.split(' ');
+        words = words.map((word) => (
+            word.charAt(0).toUpperCase() + word.substring(1)
+        ))
+        return words.join(' ');
     }
 
     const addCard = async () => {
         setAddCardMessage("");
         if(currentCard.name && currentCard.quantity > 0) {
-            const res = await fetch("/api/cards?title=" + currentCard.name, {method: "POST"});
+            const res = await fetch("/api/cards?title=" + capitalizeEachFirstLetter(currentCard.name), {method: "POST"});
             const cardInfo = await res.json();
+
             if(cardInfo.name) {
-                let clone = [...cards];
-                clone.push({name: cardInfo.name, quantity: currentCard.quantity});
+                let clone = new Map([...cards]);
+                clone.set(cardInfo.name, currentCard.quantity);
                 setCards(clone);
                 setCurrentCard(CURRENT_CARD_DEFAULT);
             } else {
@@ -55,6 +87,12 @@ const CreateDeck = ({...props}) => {
         }
         await fetch('/api/decks?authID='+userID, {method:'POST', body:JSON.stringify(body)});
     }
+
+    const handleKeyPress = (event) => {
+        if(event.key === 'Enter'){
+          addCard();
+        }
+      }
 
     return (
         <div className="container mt-5 d-flex justify-content-center align-items-center">
@@ -93,12 +131,27 @@ const CreateDeck = ({...props}) => {
                     <Form.Row>
                         <Form.Group as={Col} md={10} controlId="formCardname">
                             <Form.Label>Card Name</Form.Label>
-                            <Form.Control type="text" onChange={(e)=>setCurrentCard({name:e.target.value, quantity:currentCard.quantity})} value={currentCard.name} autoComplete="off"/>
-                            <Button variant="secondary" onClick={()=>addCard()}> Add Card</Button>
+                            <Form.Control 
+                                type="text" 
+                                onKeyPress={handleKeyPress}
+                                onChange={(e)=>setCurrentCard({name:e.target.value, quantity:currentCard.quantity})} 
+                                value={currentCard.name} autoComplete="off"
+                            />
                         </Form.Group>
                         <Form.Group as={Col} md={2} controlId="formCardnum">
                             <Form.Label>How Many?</Form.Label>
-                            <Form.Control type="number" onChange={(e)=>setCurrentCard({name:currentCard.name, quantity:e.target.value})} value={currentCard.quantity}/>
+                            <Form.Control 
+                                type="number" 
+                                onKeyPress={handleKeyPress}
+                                onChange={(e)=>setCurrentCard({name:currentCard.name, quantity:e.target.value})} 
+                                value={currentCard.quantity}
+                            />
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Form.Row>
+                        <Form.Group as={Col}>
+                            <Button variant="secondary" onClick={()=>addCard()}> Add Card</Button>
                         </Form.Group>
                     </Form.Row>
 
@@ -113,8 +166,19 @@ const CreateDeck = ({...props}) => {
                     
                     
                     <Form.Group controlId="formCardArea">
-                        <Form.Label>Deck List ({cards.length})</Form.Label>
-                        <Form.Control className="disabled" disabled as="textarea" rows="10" onChange={() => console.log("Unable to update textarea, disabled")} value={displayCards}/> 
+                        <Form.Label>Deck List ({[...cards].length})</Form.Label>
+                        <Table id="displayContainer" bordered size="sm">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Quantity</th>
+                                    <th>Card Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="displayCards">
+                                {displayCards}
+                            </tbody>
+                        </Table>
                     </Form.Group>
 
                     <hr/>

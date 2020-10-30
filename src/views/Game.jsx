@@ -74,7 +74,6 @@ const Game = ({setView, ...props}) => {
     }
 
     const hardReset = () => {
-        console.log("RESETTING")
         setBoard(defaultBoard);
         setGraveyard(defaultGraveyard);
     }

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { IDContext } from '../scripts/id-context';
-import {Col, Row} from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 const initialLoading = <span className="loading-content">Loading Decks...</span>;
 const noDecks = <span className="loading-content">No Decks Found</span>;
