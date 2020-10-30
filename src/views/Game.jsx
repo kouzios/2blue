@@ -20,6 +20,7 @@ const Game = ({setView, ...props}) => {
             <MTGCard removeCard={(status)=>removeCard(location, card, status)} key={location+card+index} title={card}/>
         ));
         setDisplayBoard(clone);
+        //eslint-disable-next-line
     }, [board]);
     
     useEffect(() => {
@@ -29,6 +30,7 @@ const Game = ({setView, ...props}) => {
             <MTGCard removeCard={(status)=>removeCard(location, card, status)} key={location+card+index} title={card}/>
         ));
         setDisplayGraveyard(clone);
+        //eslint-disable-next-line
     }, [graveyard]);
 
     const removeCard = (location, cardName, optionalStatus) => {
