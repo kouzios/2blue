@@ -51,6 +51,7 @@ const Routes = () => {
   //config
   //store saved cards via cookie
   //change alert error handling to state-based
+  //if mouseover cardname returns an image, store it and use instead of a new API call
 
 
   const openDecklist = (id) => {

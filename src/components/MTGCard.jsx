@@ -6,6 +6,7 @@ const MTGCard = ({removeCard, title, ...props}) => {
 
     useEffect(() => {
         getCard();
+        //estlint-disable-next-line
     }, [])
 
     const getCard = async () => {        

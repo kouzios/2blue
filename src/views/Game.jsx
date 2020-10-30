@@ -7,7 +7,7 @@ import { Row, Button } from 'react-bootstrap';
 const defaultBoard = new Set();
 const defaultGraveyard = new Set();
 
-const Profile = ({setView, ...props}) => {
+const Game = ({setView, ...props}) => {
     const [board, setBoard] = useState(defaultBoard);
     const [displayBoard, setDisplayBoard] = useState(null);
     const [graveyard, setGraveyard] = useState(defaultGraveyard);
@@ -92,7 +92,7 @@ const Profile = ({setView, ...props}) => {
                 </CustomPanel>
             </Row>
 
-            <Row className="ml-2 mr-2 justify-content-around">
+            <Row className="ml-2 mr-2">
                 <CustomPanel addable addCard={addCard} md={6} title="board">
                     {displayBoard}
                 </CustomPanel>
@@ -105,4 +105,4 @@ const Profile = ({setView, ...props}) => {
     );
 }
 
-export default Profile;
+export default Game;
