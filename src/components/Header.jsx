@@ -13,6 +13,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [initialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
     const [initialID] = useState(window.location.search);
     const [timer, setTimer] = useState(null);
+    const [test, setTest] = useState("");
 
     useEffect(() => {
         initiateSigninButton();
@@ -23,6 +24,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     useEffect(() => {
         //If Google returned a signed in state for user
         if(signedIn === true || signedIn === false) {
+            setTest("Entered clear path");
             clearTimeout(timer);
             signedIn ? setSignedInView(initialPath, initialID) : setView("welcome");
         }
@@ -31,7 +33,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
 
     //Continually check if we can connect to Google
     const checkAuthStatus = () => {
-        if(!signedIn) {
+        if(signedIn === null || signedIn === undefined) {
             setTimeout(() => {
                 const google = window.gapi.auth2;
                 if(google) {
@@ -57,7 +59,6 @@ const Header = ({setView, setSignedInView, ...props}) => {
     }
 
     const onSignIn = async (googleUser) => {
-        setView("loading");
         const id_token = googleUser.getAuthResponse().id_token;
         setUserID(id_token);
         const profile = googleUser.getBasicProfile();
@@ -111,6 +112,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
             <Row id="header" className="d-flex justify-content-end">
                 <Col className="d-flex justify-content-start">
                     <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
+                    {test}
                 </Col>
                 <Col className="d-flex justify-content-end">
                     { 

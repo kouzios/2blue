@@ -52,6 +52,10 @@ const Routes = () => {
   //store saved cards via cookie
   //change alert error handling to state-based
   //success messages
+  //decklists:
+  // Sorting
+  // Change mode b/w text and image (sorted by cmc?)
+  // Stats (colors, types, etc)
 
 
   const openDecklist = (id) => {

@@ -49,7 +49,6 @@ const CreateDeck = ({ ...props }) => {
             placement="right"
             delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip(name)}
-						onToggle={console.log("test")}
           >
 						<span className="default">{name}</span>
 				</OverlayTrigger>

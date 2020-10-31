@@ -34,7 +34,6 @@ const Deck = ({total, openDecklist, ...props}) => {
           }
         });
         setDisplay(mapped);
-        console.log(mapped)
       } else {
         setDisplay(noDecks);
       }
