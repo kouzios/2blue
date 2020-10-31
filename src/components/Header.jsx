@@ -25,7 +25,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     useEffect(() => {
         //If Google returned a signed in state for user
         if(signedIn === true || signedIn === false) {
-            setTest("Entered clear path");
+            //setTest("Entered clear path");
             clearTimeout(timer);
             signedIn ? setSignedInView(initialPath, initialID) : setView("welcome");
         }
@@ -36,14 +36,18 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const checkAuthStatus = () => {
         if(signedIn === null || signedIn === undefined) {
             setTimeout(() => {
-                setTest(test + count + 1);
-                setCount(count + 1);
-                const google = window.gapi.auth2;
+                console.log(count)
+                setTest(prevTest => prevTest + "1");
+                console.log(count)
+                let google = window.gapi.auth2;
+                console.log(google);
+                google = null;
                 if(google) {
                     const GoogleAuth = google.getAuthInstance();
                     const googleStatusSignedIn = GoogleAuth.isSignedIn.get();
                     if(!googleStatusSignedIn) {
                         setSignedIn(false);
+                        checkAuthStatus();
                     }
                 }  else {
                     checkAuthStatus();
