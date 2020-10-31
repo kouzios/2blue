@@ -14,6 +14,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [initialID] = useState(window.location.search);
     const [timer, setTimer] = useState(null);
     const [test, setTest] = useState("Not entered clear path");
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         initiateSigninButton();
@@ -35,6 +36,8 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const checkAuthStatus = () => {
         if(signedIn === null || signedIn === undefined) {
             setTimeout(() => {
+                setTest(test + count + 1);
+                setCount(count + 1);
                 const google = window.gapi.auth2;
                 if(google) {
                     const GoogleAuth = google.getAuthInstance();
