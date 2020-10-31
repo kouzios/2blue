@@ -13,7 +13,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [initialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
     const [initialID] = useState(window.location.search);
     const [timer, setTimer] = useState(null);
-    const [test, setTest] = useState("");
+    const [test, setTest] = useState("Not entered clear path");
 
     useEffect(() => {
         initiateSigninButton();
