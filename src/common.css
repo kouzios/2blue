@@ -29,6 +29,30 @@ html, body {
   max-height: 40px;
 }
 
+.small-logo {
+  max-width: 40px;
+  max-height: 40px;
+}
+
+#small-logo-header {
+  display: none !important;
+}
+
+#banner-logo-header {
+  display: flex !important;
+}
+
+/* Change logo size based on screen size */
+@media only screen and (max-device-width: 394px) {
+  #small-logo-header {
+    display: flex !important;
+  }
+
+  #banner-logo-header {
+    display: none !important;
+  }
+}
+
 .embolden {
   font-weight: bold;
   color: rgba(31, 133, 192, 1);
@@ -67,23 +91,24 @@ html, body {
   cursor: default;
 }
 
-#background #opacity-layer {
+#background .opacity-layer {
   width: 100%;
 }
 
-#background #opacity-layer .row {
+#background .opacity-layer .row {
   padding: 5px 10px 5px 10px;
 }
 
 /* End Welcome Page */
 
-#selection #opacity-layer {
+#selection .opacity-layer {
   background: rgba(31, 133, 192, 0.8);
   border-radius: 15px;
   min-width: 350px;
+  margin-bottom: 10px;
 }
 
-#selection #opacity-layer .row {
+#selection .opacity-layer .row {
   padding: 5px 10px 5px 10px;
 }
 

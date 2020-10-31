@@ -70,7 +70,7 @@ const Deck = ({...props}) => {
   return (
     <div id="selection">
       <div id="overlay" className="row h-100 justify-content-around align-items-center">
-          <Col id="opacity-layer" className="no-flex pb-2">
+          <Col className="opacity-layer no-flex pb-2">
               <Row><h3>{ decksInfo.id ? decksInfo.name : null }</h3></Row>
               <hr/>
               {display}

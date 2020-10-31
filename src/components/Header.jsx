@@ -108,8 +108,9 @@ const Header = ({setView, setSignedInView, ...props}) => {
     return (
         <div>
             <Row id="header" className="d-flex justify-content-end">
-                <Col className="d-flex justify-content-start">
-                    <img className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
+                <Col  className="d-flex justify-content-start">
+                    <img id="banner-logo-header" className="clickable banner-logo" src="logo_long.png" alt="Banner logo" onClick={()=>setView("home")}/>
+                    <img id="small-logo-header" className="clickable small-logo" src="logo.png" alt="Small Logo" onClick={()=>setView("home")}/>
                 </Col>
                 <Col className="d-flex justify-content-end">
                     { 

@@ -36,15 +36,15 @@ const CreateDeck = ({ ...props }) => {
 
   const CardRow = (name, quantity, index) => (
     <Row key={quantity + name + index}>
-      <Col md="2">
+      <Col md="2" sm="4" xs="4">
         <Button variant="danger" onClick={() => deleteCard(name)}>
           DELETE
         </Button>
       </Col>
-      <Col className="quantity" md="1">
+      <Col className="quantity" md="1" sm="4" xs="4">
         {quantity}
       </Col>
-      <Col className="name">
+      <Col className="name" md="1" sm="4" xs="4">
 				<OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
@@ -205,9 +205,9 @@ const CreateDeck = ({ ...props }) => {
             <div id="displayContainer">
               <div id="displayHeader">
                 <Row className="embolden">
-                  <Col md="2">Action</Col>
-                  <Col md="1">#</Col>
-                  <Col>Card Name</Col>
+                  <Col md="2" sm="4" xs="4">Action</Col>
+                  <Col md="1" sm="4" xs="4">#</Col>
+                  <Col md="1" sm="4" xs="4">Card Name</Col>
                 </Row>
               </div>
 

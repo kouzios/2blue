@@ -6,8 +6,8 @@ const Profile = ({...props}) => {
     <div id="background">
       <div id="overlay" className="row h-100 align-items-center">
         <Col id="opacity-layer">
-          <Row>
-            <Col className="d-flex justify-content-end" md="4">
+          <Row className="justify-content-center">
+            <Col className="d-flex justify-content-end" md="4" sm="6" xs="6">
               <img className="logo-hero" src="logo.png" alt="Homepage site logo"/>
             </Col>
             <Col className="d-flex align-items-center">
