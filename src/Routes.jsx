@@ -91,7 +91,7 @@ const Routes = () => {
       case "welcome": return <Welcome />;
       case "decks": return <Decks openDecklist={openDecklist}/>;
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
-      case "create": return <CreateDeck setView={setView}/>;
+      case "create": return <CreateDeck openDecklist={openDecklist} setView={setView}/>;
       case "profile": return <Profile setView={setView}/>;
       case "game": return <Game setView={setView}/>
       default: return HomeComponent();

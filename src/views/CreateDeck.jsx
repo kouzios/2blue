@@ -7,7 +7,7 @@ import MTGCard from '../components/MTGCard';
 const CURRENT_CARD_DEFAULT = { name: "", quantity: "1" };
 const CARDS_DEFAULT = new Map();
 
-const CreateDeck = ({ ...props }) => {
+const CreateDeck = ({ openDecklist,  ...props }) => {
   const [userID] = useContext(IDContext);
   const [cards, setCards] = useState(CARDS_DEFAULT);
   const [displayCards, setDisplayCards] = useState("");
@@ -44,7 +44,7 @@ const CreateDeck = ({ ...props }) => {
       <Col className="quantity" md="1" sm="4" xs="4">
         {quantity}
       </Col>
-      <Col className="name" md="1" sm="4" xs="4">
+      <Col className="name" md="9" sm="4" xs="4">
 				<OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
@@ -57,7 +57,7 @@ const CreateDeck = ({ ...props }) => {
   );
 
   const cardsToPlaintext = () =>
-    [...cards].map((card, index) => CardRow(card[0], card[1], index));
+    [...cards].map((card, index) => CardRow(card[0], card[1].quantity, index));
 
   //Our JSON object for MTG cards requires a format such as "Sol Ring" not "sol ring", so we convert it thusly
   const capitalizeEachFirstLetter = (phrase) => {
@@ -76,11 +76,12 @@ const CreateDeck = ({ ...props }) => {
         "/api/cards?title=" + capitalizeEachFirstLetter(currentCard.name),
         { method: "POST" }
       );
-      const cardInfo = await res.json();
+      let cardInfo = await res.json();
 
       if (cardInfo.name) {
         let clone = new Map([...cards]);
-        clone.set(cardInfo.name, currentCard.quantity);
+        cardInfo.quantity = currentCard.quantity;
+        clone.set(cardInfo.name, cardInfo);
         setCards(clone);
         setCurrentCard(CURRENT_CARD_DEFAULT);
       } else {
@@ -95,15 +96,20 @@ const CreateDeck = ({ ...props }) => {
 
   const createDeck = async (event) => {
     setDeckNameMessage("");
-    const body = { name, cards, type };
+    const cardsArray = Array.from(cards); //Map to array
+    let clone = cardsArray.map((card) => (card[1])); //Map format to normal formatting
+    const body = { name, cards: clone, type };
     if (name === "") {
       setDeckNameMessage("Please fill in deck name");
       return;
     }
-    await fetch("/api/decks?authID=" + userID, {
+    const res = await fetch("/api/decks?authID=" + userID, {
       method: "POST",
       body: JSON.stringify(body),
     });
+    const data = await res.json();
+    const id = data[0].id;
+    openDecklist(id);
   };
 
   const handleKeyPress = (event) => {
@@ -207,7 +213,7 @@ const CreateDeck = ({ ...props }) => {
                 <Row className="embolden">
                   <Col md="2" sm="4" xs="4">Action</Col>
                   <Col md="1" sm="4" xs="4">#</Col>
-                  <Col md="1" sm="4" xs="4">Card Name</Col>
+                  <Col md="9" sm="4" xs="4">Card Name</Col>
                 </Row>
               </div>
 
