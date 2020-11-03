@@ -15,16 +15,6 @@ const defaultColors = new Map([
   ['G', 0],
 ]);
 
-const WUBRGcolors = [
-  'rgba(255, 255, 255, 1)',
-  'rgba(52, 135, 203, 1)',
-  'rgba(0, 0, 0, 1)',
-  'rgba(224, 0, 0, 1)',
-  'rgba(0, 138, 14, 1)',
-];
-
-const labels = ['White', 'Blue', 'Black', 'Red', 'Green'];
-
 const Deck = ({...props}) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
@@ -48,11 +38,12 @@ const Deck = ({...props}) => {
     } else {
       setDisplay(noDecks);
     }
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [decksInfo]);
 
   useEffect(() => {
     chartColors();
+    // eslint-disable-next-line
   }, [colors]);
 
   const renderTooltip = (card) => (
@@ -93,17 +84,43 @@ const Deck = ({...props}) => {
   };
 
   const chartColors = () => {
-    const colorArray = Array.from(colors);
     var ctx = document.getElementById('myChart').getContext('2d');
+
+    //Convert color map to an array containing the number of colors for each category
+    const colorArray = Array.from(colors);
+    const fullData = colorArray.map((color) => (
+      color[1]
+    ));
+
+    let labels = [];
+    let colorValues = [];
+    const colorLabels = [
+      {label: 'White', color: 'rgba(255, 255, 255, 1)'},
+      {label: 'Blue', color: 'rgba(52, 135, 203, 1)'},
+      {label: 'Black', color: 'rgba(0, 0, 0, 1)'},
+      {label: 'Red', color: 'rgba(224, 0, 0, 1)'},
+      {label: 'Green', color: 'rgba(0, 138, 14, 1)'},
+    ]
+    
+    //For each color, check if it's in deck and update label accordingly
+    for(let i = 0; i < 5; i++) {
+      if (fullData[i] > 0) {//If the deck has cards of this color category
+        const currentColor = colorLabels[i];
+        labels.push(currentColor.label);
+        colorValues.push(currentColor.color);
+      }
+    }
+
+    const data = fullData.filter((val) => val > 0);
+
     new Chart(ctx, {
       type: 'pie',
       data: {
           labels,
           datasets: [{
-              label: '# of Votes',
-              data: [colorArray[0][1], colorArray[1][1], colorArray[2][1], colorArray[3][1], colorArray[4][1]],
-              backgroundColor: WUBRGcolors,
-              borderColor: WUBRGcolors,
+              data,
+              backgroundColor: colorValues,
+              borderColor: colorValues,
               borderWidth: 1
           }]
       },
