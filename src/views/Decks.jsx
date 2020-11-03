@@ -46,7 +46,7 @@ const Deck = ({openDecklist, ...props}) => {
   return (
     <div id="selection">
         <div id="overlay" className="row h-100 justify-content-around align-items-center">
-            <Col className="opacity-layer no-flex">
+            <Col md="4" className="opacity-layer no-flex">
                 <Row><h3>Decklists</h3></Row>
                 <hr/>
                 {display}

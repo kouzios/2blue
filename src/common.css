@@ -104,12 +104,19 @@ html, body {
 #selection .opacity-layer {
   background: rgba(31, 133, 192, 0.8);
   border-radius: 15px;
-  min-width: 350px;
   margin-bottom: 10px;
+}
+
+#selection #chart {
+  background: rgba(128, 142, 150, 0.8) !important;
 }
 
 #selection .opacity-layer .row {
   padding: 5px 10px 5px 10px;
+}
+
+#selection #title h3{
+  text-align: center;
 }
 
 #selection {
@@ -218,6 +225,12 @@ html, body {
   color: red;
 }
 
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 /* Create a deck table */
 
 #displayCards {
@@ -233,12 +246,6 @@ html, body {
 #displayContainer .row {
   padding: 5px 0px 5px 5px;
   border-bottom: 1px solid darkgrey;
-}
-
-#displayContainer .quantity, #displayContainer .name {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 #displayHeader .row, #displayCards .row {

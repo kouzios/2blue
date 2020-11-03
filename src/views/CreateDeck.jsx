@@ -41,10 +41,10 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
           DELETE
         </Button>
       </Col>
-      <Col className="quantity" md="1" sm="4" xs="4">
+      <Col className="ellipsis quantity" md="1" sm="4" xs="4">
         {quantity}
       </Col>
-      <Col className="name" md="9" sm="4" xs="4">
+      <Col className="ellipsis name" md="9" sm="4" xs="4">
 				<OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
@@ -59,21 +59,22 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   const cardsToPlaintext = () =>
     [...cards].map((card, index) => CardRow(card[0], card[1].quantity, index));
 
-  //Our JSON object for MTG cards requires a format such as "Sol Ring" not "sol ring", so we convert it thusly
-  const capitalizeEachFirstLetter = (phrase) => {
-    let words = phrase.toLowerCase();
-    words = words.split(" ");
-    words = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.substring(1)
-    );
-    return words.join(" ");
-  };
+  // //Our JSON object for MTG cards requires a format such as "Sol Ring" not "sol ring", so we convert it thusly
+  // const capitalizeEachFirstLetter = (phrase) => {
+  //   let words = phrase.toLowerCase();
+  //   words = words.split(" ");
+  //   words = words.map(
+  //     (word) => word.charAt(0).toUpperCase() + word.substring(1)
+  //   );
+  //   return words.join(" ");
+  // };
 
   const addCard = async () => {
     setAddCardMessage("");
-    if (currentCard.name && currentCard.quantity > 0) {
+    const cardName = currentCard.name;
+    if (cardName && currentCard.quantity > 0) {
       const res = await fetch(
-        "/api/cards?title=" + capitalizeEachFirstLetter(currentCard.name),
+        "/api/cards?title=" + cardName.toLowerCase(),
         { method: "POST" }
       );
       let cardInfo = await res.json();
@@ -175,6 +176,10 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                 value={currentCard.name}
                 autoComplete="off"
               />
+              <Form.Text id="cardHelpBlock" muted>
+                If adding a double faced card, please follow the format of: Frontname // Backname. 
+                For example, "Journey to Eternity // Atzal, Cave of Eternity"
+              </Form.Text>
             </Form.Group>
             <Form.Group as={Col} md={2} controlId="formCardnum">
               <Form.Label>How Many?</Form.Label>
