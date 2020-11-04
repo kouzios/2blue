@@ -56,6 +56,9 @@ const Routes = () => {
   // Sorting
   // Change mode b/w text and image (sorted by cmc?)
   // Stats (colors, types, etc)
+  //add deck creation time and have "recent" sort by that time
+
+  //problem with dual side lands, color but also like type. It gives second side, u want first side
 
 
   const openDecklist = (id) => {

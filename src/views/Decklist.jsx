@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import MTGCard from '../components/MTGCard';
 import { IDContext } from '../scripts/id-context';
-import { Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
+import { Container, Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
 var Chart = require('chart.js');
 
 const initialLoading = <span className="loading-content">Loading Cards...</span>;
@@ -15,11 +15,20 @@ const defaultColors = new Map([
   ['G', 0],
 ]);
 
-const Deck = ({...props}) => {
+const colorLabels = {
+  'W':'rgba(255, 255, 255, 1)',
+  'U': 'rgba(52, 135, 203, 1)',
+  'B': 'rgba(0, 0, 0, 1)',
+  'R': 'rgba(224, 0, 0, 1)',
+  'G': 'rgba(0, 138, 14, 1)',
+}
+
+const Deck = ({ ...props }) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
   const [display, setDisplay] = useState(initialLoading);
   const [colors, setColors] = useState(defaultColors);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
     loadDecks();
@@ -35,6 +44,7 @@ const Deck = ({...props}) => {
     if(decksInfo.id != null) {
       formatDecks();
       retrieveColors();
+      retrieveStats();
     } else {
       setDisplay(noDecks);
     }
@@ -85,86 +95,107 @@ const Deck = ({...props}) => {
 
   const chartColors = () => {
     var ctx = document.getElementById('myChart').getContext('2d');
+    let chart = {data:[], labels: [], colorValues: []};
 
-    //Convert color map to an array containing the number of colors for each category
-    const colorArray = Array.from(colors);
-    const fullData = colorArray.map((color) => (
-      color[1]
-    ));
-
-    let labels = [];
-    let colorValues = [];
-    const colorLabels = [
-      {label: 'White', color: 'rgba(255, 255, 255, 1)'},
-      {label: 'Blue', color: 'rgba(52, 135, 203, 1)'},
-      {label: 'Black', color: 'rgba(0, 0, 0, 1)'},
-      {label: 'Red', color: 'rgba(224, 0, 0, 1)'},
-      {label: 'Green', color: 'rgba(0, 138, 14, 1)'},
-    ]
-    
-    //For each color, check if it's in deck and update label accordingly
-    for(let i = 0; i < 5; i++) {
-      if (fullData[i] > 0) {//If the deck has cards of this color category
-        const currentColor = colorLabels[i];
-        labels.push(currentColor.label);
-        colorValues.push(currentColor.color);
-      }
+    let val;
+    const keysIterator = colors.keys();
+    const valueIterator = colors.values();
+    //Iterate through all colors
+    while((val = valueIterator.next().value) !== undefined) {
+      const key = keysIterator.next().value;
+      if (val <= 0) //Ensure we only store active colors (at least 1 card of the color)
+        continue;
+      chart.data.push(val);
+      chart.labels.push(key)
+      chart.colorValues.push(colorLabels[key]);
     }
-
-    const data = fullData.filter((val) => val > 0);
 
     new Chart(ctx, {
       type: 'pie',
       data: {
-          labels,
+          labels: chart.labels,
           datasets: [{
-              data,
-              backgroundColor: colorValues,
-              borderColor: colorValues,
-              borderWidth: 1
+            data: chart.data,
+            backgroundColor: chart.colorValues,
+            borderColor: chart.colorValues,
+            borderWidth: 1,
           }]
       },
-      options: {}
+      options: {
+        title: {
+          display: true,
+          text: 'Card Colors',
+          fontColor: 'white',
+          fontStyle: 'bold',
+          fontSize: '28',
+        }
+      }
   });
   }
 
   const retrieveColors = () => {
     const clone = new Map(defaultColors);
-    const deck = decksInfo.cards
+    const deck = decksInfo.cards;
 
-    const cardColors = deck.map((card) => {
-      let colors = card.colors;
-      if(colors.length === 0) {
-        colors = card.colorIdentity; //Two-faced cards have no color thus need color identity, a mtgjson error
-      }
-      return colors;
-    });
+    //TODO: Fix double sided cards acting as the second side
+    //Map cards to only store their quantity, then summate them ex: W=>1, U=>2, B=>1, R=>0, G=>0 can become WUBU
+    const cardColors = deck.map((card) => card.colors).reduce((sum, current)=>sum+current).toString();
 
-    cardColors.forEach((cardColor) => {
-      cardColor.forEach((color) => {
-        const colorQuantity = clone.get(color);
-        clone.set(color, colorQuantity + 1)
-      })
-    })
+    let val;
+    const keysIterator = colors.keys();
+    //Iterate through all color keys to store their quantity
+    while(val = keysIterator.next().value) {
+      const expression = new RegExp(val, 'g');
+      clone.set(val, (cardColors.match(expression) || []).length);
+    }
     setColors(clone);
   }
 
+  const retrieveStats = () => {//TODO: Combine action w/retrieveColors?
+    const deck = decksInfo.cards;
+
+    const quantity = deck.map((card)=>card.quantity).reduce((sum, current) => parseInt(sum) + parseInt(current));
+    const CMC = deck.map((card)=>card.convertedManaCost).reduce((sum, current)=>sum+current);
+    const AverageCMC = (CMC / quantity).toFixed(1);
+
+    setStats(
+      <Row className="justify-content-around">
+        <Col md="2">Number of Cards: {quantity}</Col>
+        <Col md="2">Average CMC: {AverageCMC}</Col>
+        <Col md="4">
+          <Col>White Cards: {colors.get("W")}</Col>
+          <Col>Blue Cards: {colors.get("U")}</Col>
+          <Col>Black Cards: {colors.get("B")}</Col>
+          <Col>Red Cards: {colors.get("R")}</Col>
+          <Col>Green Cards: {colors.get("G")}</Col>
+        </Col>
+      </Row>
+    )
+  }
+
   return (
-    <div id="selection">
-       <div id="title" className="row h-100 justify-content-around align-items-center">
+    <Container id="selection">
+       <Row id="title" className="h-100 justify-content-around align-items-center">
           <Col md="6" className="pb-2">
               <h3 className="embolden">{ decksInfo.id ? decksInfo.name : null }</h3>
           </Col>
-      </div>
-      <div id="overlay" className="row h-100 justify-content-around align-items-center">
+      </Row>
+      <Row id="overlay" className="h-100 justify-content-around align-items-center">
+        <Col id="cards" md="8" className="opacity-layer pb-2">
+            <Row><h3>Stats</h3></Row>
+            {stats}
+        </Col>
+      </Row>
+      <Row id="overlay" className="h-100 justify-content-around align-items-center">
         <Col id="cards" md="4" className="opacity-layer pb-2">
+            <Row><h3>Cards</h3></Row>
             {display}
         </Col>
         <Col id="chart" md="4" className="opacity-layer pb-2">
           <canvas id="myChart" width="200" height="200"/>
         </Col>
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 }
 

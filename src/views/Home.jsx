@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import LimitedDecks from '../components/LimitedDecks';
 
 const gameText = "Starting a game allows you to cards on the board and in players graveyards during a game of Magic: The Gathering";
 
 const Profile = ({openDecklist, setView, ...props}) => { 
   return (
-    <div id="selection">
+    <Container id="selection">
       <div id="overlay" className="row h-100 justify-content-around align-items-center">
         <Col md="4" className="opacity-layer no-flex">
           <Row><h3 className="clickable" onClick={() => setView("game")}>Start a game</h3></Row>
@@ -21,7 +21,7 @@ const Profile = ({openDecklist, setView, ...props}) => {
           <Row><h5 className="clickable" onClick={() => setView("decks")}>View more {">"}</h5></Row>
         </Col>
       </div>
-    </div>
+    </Container>
   );
 }
 
