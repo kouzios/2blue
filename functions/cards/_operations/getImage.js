@@ -19,11 +19,12 @@ module.exports = async (param) => {
         }
         const json = await res.json();
         const faces = json.card_faces;
-        let image = null;
+        let image = [];
         if(faces) {//TODO: Allow flipping
-            image = json.card_faces[0].image_uris.small;
+            image.push(json.card_faces[0].image_uris.normal);
+            image.push(json.card_faces[1].image_uris.normal);
         } else {
-            image = json.image_uris.small
+            image.push(json.image_uris.normal);
         }
         images.set(cardName, image);
         console.log("Retrieving New: " + image)

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import MTGCardOverlay from './MTGCardOverlay';
+import { OverlayTrigger, Tooltip, Button, Card } from 'react-bootstrap';
 
 const MTGCard = ({removeCard, title, ...props}) => {
-    const [imageURL, setImageURL] = useState(null);
+    const [firstSide, setFirstSide] = useState(null);
+    const [secondSide, setSecondSide] = useState(null);
+    const [flipped, setFlipped] = useState(null);
 
     useEffect(() => {
         getCard();
@@ -17,13 +20,38 @@ const MTGCard = ({removeCard, title, ...props}) => {
             return;
         }
         const img = await res.json()
-        setImageURL(img);
+        setFirstSide(img[0]);
+
+        if(img[1]) {
+          setFlipped(false);
+          setSecondSide(img[1]);
+        }
     }
+
+    const renderTooltip = (name, flipped) => (
+        <Tooltip className="mtg-container">
+          <MTGCardOverlay title={name} flipped={flipped}/>
+        </Tooltip>
+      )
 
     return(
         <Card className="mtg">
-            <img src={imageURL} alt={title}/>
-            <Button className="delete" variant="danger" onClick={removeCard}>X</Button>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+						overlay={renderTooltip(title, flipped)}
+          >
+						{flipped === true ? 
+                <img className="mtg" src={secondSide} alt={title}/> : 
+                <img className="mtg" src={firstSide} alt={title}/>
+            }
+				</OverlayTrigger>
+            
+        <Button className="delete" variant="danger" onClick={removeCard}>X</Button>
+        {flipped !== null ? 
+          <Button className="flipped" variant="secondary" onClick={()=>setFlipped(oldFlipped=>!oldFlipped)}>F</Button> :
+          null
+        }
         </Card>
     )
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import MTGCard from '../components/MTGCard';
+import MTGCardOverlay from '../components/MTGCardOverlay';
 import { IDContext } from '../scripts/id-context';
 import { Container, Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
 var Chart = require('chart.js');
@@ -57,8 +57,8 @@ const Deck = ({ ...props }) => {
   }, [colors]);
 
   const renderTooltip = (card) => (
-    <Tooltip>
-      <MTGCard title={card.name}/>
+    <Tooltip className="mtg-container">
+      <MTGCardOverlay title={card.name}/>
     </Tooltip>
   )
 

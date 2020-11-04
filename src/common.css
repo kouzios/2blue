@@ -187,6 +187,10 @@ html, body {
   border-radius: 15px;
 }
 
+.tooltip.show {
+  opacity: 1 !important;
+}
+
 .panel-body {
   padding: 30px 30px 30px 30px;
 }
@@ -203,9 +207,26 @@ html, body {
   overflow-y: auto;
 }
 
+.mtg-overlay {
+  width: 244px !important; /* Scryfall needs us to keep ratio of 488 × 680*/
+  height: 340px  !important;
+}
+
+.mtg-container, .mtg-container .tooltip-inner {
+  background-color:transparent !important;
+}
+
 .mtg {
-  height: 204px !important;
   width: 146px !important;
+  height: 204px  !important;
+}
+
+.mtg .flipped {
+  position: relative;
+  top: -7em;
+  left: 7em;
+  width: 35px;
+  height: 35px;
 }
 
 .mtg .delete {

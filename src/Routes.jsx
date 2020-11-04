@@ -38,27 +38,24 @@ const Routes = () => {
   }
 
   //TODO: Big tasks before using link in job applications
-  //at least slightly fix mobile
-  //add iconography
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //on any 401, send back to Welcome
-  //pop state goign to decklists needs to occur multiple times which is bad
   //add something else to hero page, something under maybe?
   //in start game import your own deck for various usages? (Tutoring for example)
   //Make add card immediately add, then remove if not valid?
-  //hover card to see larger
-  //img flipping
-  //config
-  //store saved cards via cookie
+  //hover card to see larger in Game
+  //Set up img flipping for dual-face cards
+  //Implement Config in Game
+  //store saved cards in Game via cookie to allow refresh-saving
   //change alert error handling to state-based
-  //success messages
   //decklists:
-  // Sorting
-  // Change mode b/w text and image (sorted by cmc?)
-  // Stats (colors, types, etc)
+  // Sorting (type, cmc, color)
+  // Change mode b/w text (default) and images (like in real life, stacked) (sorted by cmc?)
   //add deck creation time and have "recent" sort by that time
-
   //problem with dual side lands, color but also like type. It gives second side, u want first side
+  //dont let users use home icon to redirect to Home while logged out in Welcome page
+  //Fix mobile not logging u in just looping google sign in
+  //TODO: Strip starting and ending spaces in a card name cuz json
 
 
   const openDecklist = (id) => {

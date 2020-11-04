@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Tooltip, OverlayTrigger, Button, Form, Col, Row } from "react-bootstrap";
 import { IDContext } from "../scripts/id-context";
-import MTGCard from '../components/MTGCard';
+import MTGCardOverlay from '../components/MTGCardOverlay';
 
 
 const CURRENT_CARD_DEFAULT = { name: "", quantity: "1" };
@@ -29,8 +29,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
 	};
 	
 	const renderTooltip = (name) => (
-    <Tooltip>
-      <MTGCard title={name}/>
+    <Tooltip className="mtg-container">
+      <MTGCardOverlay title={name}/>
     </Tooltip>
   )
 
