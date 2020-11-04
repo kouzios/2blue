@@ -5,6 +5,7 @@ const images = new Map();
 
 module.exports = async (param) => {
     const cardName = param.title;
+    const size = param.size;
 
     try {
         const storedImage = images.get(cardName);

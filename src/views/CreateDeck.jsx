@@ -23,16 +23,52 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   }, [cards]);
 
   const deleteCard = (name) => {
+    console.log(name)
     let clone = new Map([...cards]);
     clone.delete(name);
     setCards(clone);
 	};
 	
-	const renderTooltip = (name) => (
+	const renderTooltip = (name, flipped) => (
     <Tooltip className="mtg-container">
-      <MTGCardOverlay title={name}/>
+      <MTGCardOverlay removeCard={()=>deleteCard(name)} title={name} flipped={flipped}/>
     </Tooltip>
   )
+
+  const card = (cardName, index) => {
+    if(cardName.includes("//")) { //If two faced card, seperate the card names for overlay
+      const faces = cardName.split("//");
+      return (
+        <div>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(cardName, false)}
+          >
+            <span className="pl-1 ellipsis default">{faces[0]}</span>
+          </OverlayTrigger>
+          <span className="pl-1">//</span>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(cardName, true)}
+          >
+            <span className="pl-1 ellipsis default">{faces[1]}</span>
+          </OverlayTrigger>
+        </div>
+      )
+  }
+
+  return (
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={renderTooltip(cardName)}
+    >
+      <span className="ellipsis default">{cardName}</span>
+    </OverlayTrigger>
+  )
+  }
 
   const CardRow = (name, quantity, index) => (
     <Row key={quantity + name + index}>
@@ -45,29 +81,13 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
         {quantity}
       </Col>
       <Col className="ellipsis name" md="9" sm="4" xs="4">
-				<OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-						overlay={renderTooltip(name)}
-          >
-						<span className="default">{name}</span>
-				</OverlayTrigger>
+				{card(name, index)}
 			</Col>
     </Row>
   );
 
   const cardsToPlaintext = () =>
     [...cards].map((card, index) => CardRow(card[0], card[1].quantity, index));
-
-  // //Our JSON object for MTG cards requires a format such as "Sol Ring" not "sol ring", so we convert it thusly
-  // const capitalizeEachFirstLetter = (phrase) => {
-  //   let words = phrase.toLowerCase();
-  //   words = words.split(" ");
-  //   words = words.map(
-  //     (word) => word.charAt(0).toUpperCase() + word.substring(1)
-  //   );
-  //   return words.join(" ");
-  // };
 
   const addCard = async () => {
     setAddCardMessage("");

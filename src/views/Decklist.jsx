@@ -56,27 +56,11 @@ const Deck = ({ ...props }) => {
     // eslint-disable-next-line
   }, [colors]);
 
-  const renderTooltip = (card) => (
+  const renderTooltip = (card, flipped) => (
     <Tooltip className="mtg-container">
-      <MTGCardOverlay title={card.name}/>
+      <MTGCardOverlay removeCard={()=>null} title={card.name} flipped={flipped}/>
     </Tooltip>
   )
-
-  const formatDecks = () => {
-    const deck = decksInfo.cards
-    let mapped = deck.map((card, index) => (
-      <Row key={"card"+index}>
-        <OverlayTrigger
-          placement="right"
-          delay={{ show: 250, hide: 400 }}
-          overlay={renderTooltip(card)}
-        >
-          <span className="ellipsis default">{card.quantity}x {card.name}</span>
-        </OverlayTrigger>
-      </Row>
-    ));
-    setDisplay(mapped);
-  }
 
   const loadDecks = async () => { 
     let deckID = props.id;
@@ -92,6 +76,71 @@ const Deck = ({ ...props }) => {
       console.error(error);
     }
   };
+
+  const retrieveStats = () => {//TODO: Combine action w/retrieveColors?
+    const deck = decksInfo.cards;
+
+    const quantity = deck.map((card)=>card.quantity).reduce((sum, current) => parseInt(sum) + parseInt(current));
+    const CMC = deck.map((card)=>card.convertedManaCost).reduce((sum, current)=>sum+current);
+    const AverageCMC = (CMC / quantity).toFixed(1);
+
+    setStats(
+      <Row className="justify-content-around">
+        <Col md="2">Number of Cards: {quantity}</Col>
+        <Col md="2">Average CMC: {AverageCMC}</Col>
+        <Col md="4">
+          <Col>White Cards: {colors.get("W")}</Col>
+          <Col>Blue Cards: {colors.get("U")}</Col>
+          <Col>Black Cards: {colors.get("B")}</Col>
+          <Col>Red Cards: {colors.get("R")}</Col>
+          <Col>Green Cards: {colors.get("G")}</Col>
+        </Col>
+      </Row>
+    )
+  }
+
+  const formatDecks = () => {
+    const deck = decksInfo.cards
+    let mapped = deck.map((card, index) => {
+      const cardName = card.name;
+      const quantity = card.quantity;
+      if(cardName.includes("//")) { //If two faced card, seperate the card names for overlay
+        const faces = cardName.split("//");
+        return (
+          <Row key={"card"+index}>
+            <span>{quantity}x</span>
+            <OverlayTrigger
+              placement="right"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(card, false)}
+            >
+              <span className="pl-1 ellipsis default">{faces[0]}</span>
+            </OverlayTrigger>
+            <span className="pl-1">//</span>
+            <OverlayTrigger
+              placement="right"
+              delay={{ show: 250, hide: 400 }}
+              overlay={renderTooltip(card, true)}
+            >
+              <span className="pl-1 ellipsis default">{faces[1]}</span>
+            </OverlayTrigger>
+          </Row>
+        )
+      }
+      return (
+        <Row key={"card"+index}>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip(card)}
+          >
+            <span className="ellipsis default">{quantity}x {cardName}</span>
+          </OverlayTrigger>
+        </Row>
+      )
+    });
+    setDisplay(mapped);
+  }
 
   const chartColors = () => {
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -144,33 +193,11 @@ const Deck = ({ ...props }) => {
     let val;
     const keysIterator = colors.keys();
     //Iterate through all color keys to store their quantity
-    while(val = keysIterator.next().value) {
+    while((val = keysIterator.next().value)) {
       const expression = new RegExp(val, 'g');
       clone.set(val, (cardColors.match(expression) || []).length);
     }
     setColors(clone);
-  }
-
-  const retrieveStats = () => {//TODO: Combine action w/retrieveColors?
-    const deck = decksInfo.cards;
-
-    const quantity = deck.map((card)=>card.quantity).reduce((sum, current) => parseInt(sum) + parseInt(current));
-    const CMC = deck.map((card)=>card.convertedManaCost).reduce((sum, current)=>sum+current);
-    const AverageCMC = (CMC / quantity).toFixed(1);
-
-    setStats(
-      <Row className="justify-content-around">
-        <Col md="2">Number of Cards: {quantity}</Col>
-        <Col md="2">Average CMC: {AverageCMC}</Col>
-        <Col md="4">
-          <Col>White Cards: {colors.get("W")}</Col>
-          <Col>Blue Cards: {colors.get("U")}</Col>
-          <Col>Black Cards: {colors.get("B")}</Col>
-          <Col>Red Cards: {colors.get("R")}</Col>
-          <Col>Green Cards: {colors.get("G")}</Col>
-        </Col>
-      </Row>
-    )
   }
 
   return (

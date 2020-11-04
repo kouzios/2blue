@@ -208,7 +208,7 @@ html, body {
 }
 
 .mtg-overlay {
-  width: 244px !important; /* Scryfall needs us to keep ratio of 488 × 680*/
+  width: 244px !important;
   height: 340px  !important;
 }
 
