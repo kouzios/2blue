@@ -328,6 +328,7 @@ const Deck = ({ ...props }) => {
       data: {
         labels: chart.labels,
           datasets: [{
+            label: "Number of Cards:",
             data: chart.data,
             backgroundColor: 'rgba(255, 255, 255, 1)',
           }]
@@ -391,12 +392,13 @@ const Deck = ({ ...props }) => {
             <Row><h3>Cards</h3></Row>
             {display}
         </Col>
-        <Col id="chart" md="4" className="opacity-layer pb-2">
+        <Col id="chart" md="2" className="opacity-layer pb-2">
           <Row>
-            <canvas id="colorChart" width="200" height="200"/>
+            <canvas id="colorChart" width="5" height="5"/>
           </Row>
+          <hr/>
           <Row>
-            <canvas id="CMCchart" width="200" height="200"/>
+            <canvas id="CMCchart" width="5" height="5"/>
           </Row>
         </Col>
       </Row>
