@@ -12,6 +12,7 @@ const Game = ({setView, ...props}) => {
     const [displayBoard, setDisplayBoard] = useState(null);
     const [graveyard, setGraveyard] = useState(defaultGraveyard);
     const [displayGraveyard, setDisplayGraveyard] = useState(null);
+    const [enabledGraveyard, setEnabledGraveyard] = useState(true);
 
     useEffect(() => {
         let clone = [...board];
@@ -84,15 +85,9 @@ const Game = ({setView, ...props}) => {
         alert("TODO")
     }
 
-    return (
-        <div id="game">
-            <Row className="justify-content-center">
-                <CustomPanel md={6} title="Control Panel">
-                    <Button onClick={hardReset}>Hard Reset</Button>
-                    <Button className="disabled" disabled onClick={config}>Config</Button>
-                </CustomPanel>
-            </Row>
-
+    const gameState = () => {
+        if(enabledGraveyard === true) {
+            return(
             <Row className="ml-2 mr-2 justify-content-around">
                 <CustomPanel addable addCard={addCard} md={6} title="board">
                     {displayBoard}
@@ -101,7 +96,38 @@ const Game = ({setView, ...props}) => {
                 <CustomPanel addable addCard={addCard} md={6} title="graveyard">
                    {displayGraveyard}
                 </CustomPanel>
+              </Row>
+            )
+        } else {
+            return(
+            <Row>
+              <CustomPanel addable addCard={addCard} md={12} title="board">
+                {displayBoard}
+              </CustomPanel>
             </Row>
+            )
+        }
+    }
+
+    return (
+        <div id="game">
+            <Row className="justify-content-center">
+                <CustomPanel md={6} title="Control Panel">
+                    <Button onClick={hardReset}>Hard Reset</Button>
+                    <label>
+                      Graveyard: 
+                      <input
+                        name="enabledGraveyard"
+                        type="checkbox"
+                        checked={enabledGraveyard}
+                        onChange={(e)=>setEnabledGraveyard(e.target.checked)}
+                        className="ml-2"
+                      />
+                    </label>
+                    
+                </CustomPanel>
+            </Row>
+            {gameState()}
         </div>
     );
 }
