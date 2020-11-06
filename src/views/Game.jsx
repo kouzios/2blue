@@ -96,7 +96,7 @@ const Game = ({setView, ...props}) => {
             )
         } else {
             return(
-            <Row>
+            <Row className="ml-2 mr-2 justify-content-around">
               <CustomPanel addable addCard={addCard} md={12} title="board">
                 {displayBoard}
               </CustomPanel>
