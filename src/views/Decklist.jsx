@@ -7,7 +7,7 @@ var Chart = require('chart.js');
 const initialLoading = <span className="loading-content">Loading Cards...</span>;
 const noDecks = <span className="loading-content">No Decks Found</span>;
 
-const defaultColors = new Map([
+const DEFAULT_COLORS = new Map([
   ['W', 0],
   ['U', 0],
   ['B', 0],
@@ -23,22 +23,33 @@ const colorLabels = {
   'G': 'rgba(0, 138, 14, 1)',
 }
 
+const DEFAULT_CARDS_BY_TYPE = new Map([
+  ["Land", []],
+  ["Planeswalker", []],
+  ["Creature", []],
+  ["Artifact", []],
+  ["Enchantment", []], 
+  ["Instant", []],
+  ["Sorcery", []],
+  ["Tribal", []],
+]);
+
+
 const Deck = ({ ...props }) => {
   const [userID] = useContext(IDContext);
   const [decksInfo, setDecksInfo] = useState({id: null, cards: null, uid: [], name: null});
   const [display, setDisplay] = useState(initialLoading);
-  const [colors, setColors] = useState(defaultColors);
+  const [colors, setColors] = useState(DEFAULT_COLORS);
   const [stats, setStats] = useState(null);
+  const [cardsByType, setCardsByType] = useState(DEFAULT_CARDS_BY_TYPE);
+
 
   useEffect(() => {
+    setCardsByType(DEFAULT_CARDS_BY_TYPE);
+    setDisplay(initialLoading);
     loadDecks();
     //eslint-disable-next-line
   }, [userID]);
-
-  useEffect(() => {
-    loadDecks();
-    //eslint-disable-next-line
-  }, [props.id]);
 
   useEffect(() => {
     if(decksInfo.id != null) {
@@ -56,90 +67,155 @@ const Deck = ({ ...props }) => {
     // eslint-disable-next-line
   }, [colors]);
 
+  /* 
+   * Method built to sort cards by type even if they have multiple types, with a set priority of:
+   * land > planeswalker > creature > artifact > enchantment > instant > sorcery > tribal
+   */
+  const getType = (types) => {
+    const categories =  Array.from(cardsByType.keys());
+    for(let index = 0; index < categories.length; index++) {
+
+      const category = categories[index];
+      if(types.includes(category)) {
+        return category;
+      }
+    }
+
+    return null;
+  }
+
+  const mapExistingTypes = (types) => {
+    let typesMap = new Map(DEFAULT_CARDS_BY_TYPE);
+    let val;
+    const keysIterator = typesMap.keys();
+    //Iterate through all color keys to store their quantity
+    while((val = keysIterator.next().value)) {
+      const expression = new RegExp(val, 'g');
+      typesMap.set(val, (types.match(expression) || []).length);
+    }
+    return typesMap;
+  }
+
   const renderTooltip = (card, flipped) => (
     <Tooltip className="mtg-container">
       <MTGCardOverlay removeCard={()=>null} title={card.name} flipped={flipped}/>
     </Tooltip>
   )
 
+  const renderUniqueTypes = (types) => (
+    types.map((type)=>(
+      type[0] + ": " + type[1] + "\n"
+    ))
+  )
+
   const loadDecks = async () => { 
+
     let deckID = props.id;
-    if(!deckID) {
+    if(!deckID)
       deckID = (window.location.search).substring(4);
-    }
+
     try {
       const res = await fetch('/api/decks?type=one&deckID=' + deckID +'&authID='+userID);
       let deck = await res.json();
       deck.cards = JSON.parse(deck.cards);
+
+      let clone = new Map([...cardsByType]);
+      deck.cards.forEach((card) => {//Sort cards by primary type
+        const type = getType(card.types);
+        const cardsInType = clone.get(type);
+        clone.set(type, [card, ...cardsInType]);
+      });
+
+      setCardsByType(clone);
       setDecksInfo(deck);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const retrieveStats = () => {//TODO: Combine action w/retrieveColors?
+  const retrieveStats = () => {//TODO: Combine action w/other mapping classes?
     const deck = decksInfo.cards;
 
     const quantity = deck.map((card)=>card.quantity).reduce((sum, current) => parseInt(sum) + parseInt(current));
     const CMC = deck.map((card)=>card.convertedManaCost).reduce((sum, current)=>sum+current);
     const AverageCMC = (CMC / quantity).toFixed(1);
 
+    let types = mapExistingTypes(deck.map((card) => card.types).reduce((sum, current)=>sum+current).toString());
+    const existingTypes = [...types.values()].filter((val)=>val>0);//Only keep types with cards in them
+    console.log(existingTypes)
     setStats(
       <Row className="justify-content-around">
         <Col md="2">Number of Cards: {quantity}</Col>
         <Col md="2">Average CMC: {AverageCMC}</Col>
-        <Col md="4">
-          <Col>White Cards: {colors.get("W")}</Col>
-          <Col>Blue Cards: {colors.get("U")}</Col>
-          <Col>Black Cards: {colors.get("B")}</Col>
-          <Col>Red Cards: {colors.get("R")}</Col>
-          <Col>Green Cards: {colors.get("G")}</Col>
+        <Col md="2">
+          <OverlayTrigger
+            delay={{ show: 250, hide: 400 }}
+            placement="bottom"
+            overlay={<Tooltip>{renderUniqueTypes([...types])}</Tooltip>}
+          >
+            <span>Number of Unique Types: {existingTypes.length}</span>
+          </OverlayTrigger>
         </Col>
       </Row>
     )
   }
 
   const formatDecks = () => {
-    const deck = decksInfo.cards
-    let mapped = deck.map((card, index) => {
-      const cardName = card.name;
-      const quantity = card.quantity;
-      if(cardName.includes("//")) { //If two faced card, seperate the card names for overlay
-        const faces = cardName.split("//");
+    let val;
+    let formattedContent = [];
+    const keysIterator = cardsByType.keys();
+    const valueIterator = cardsByType.values();
+    //Iterate through all categories
+    while((val = valueIterator.next().value) !== undefined) {
+      const key = keysIterator.next().value;
+      if (val.length <= 0) //Skip category if empty
+        continue;
+      let mapped = val.map((card, index) => {
+        const cardName = card.name;
+        const quantity = card.quantity;
+        card.type = getType(card.types);
+        if(cardName.includes("//")) { //If two faced card, separate the card names for overlay
+          const faces = cardName.split("//");
+          return (
+            <Row key={"card"+index+key}>
+              <span>{quantity}x</span>
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip(card, false)}
+              >
+                <span className="pl-1 ellipsis default">{faces[0]}</span>
+              </OverlayTrigger>
+              <span className="pl-1">//</span>
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip(card, true)}
+              >
+                <span className="pl-1 ellipsis default">{faces[1]}</span>
+              </OverlayTrigger>
+            </Row>
+          )
+        }
         return (
-          <Row key={"card"+index}>
-            <span>{quantity}x</span>
+          <Row key={"card"+index+key}>
             <OverlayTrigger
               placement="right"
               delay={{ show: 250, hide: 400 }}
-              overlay={renderTooltip(card, false)}
+              overlay={renderTooltip(card)}
             >
-              <span className="pl-1 ellipsis default">{faces[0]}</span>
-            </OverlayTrigger>
-            <span className="pl-1">//</span>
-            <OverlayTrigger
-              placement="right"
-              delay={{ show: 250, hide: 400 }}
-              overlay={renderTooltip(card, true)}
-            >
-              <span className="pl-1 ellipsis default">{faces[1]}</span>
+              <span className="ellipsis default">{quantity}x {cardName}</span>
             </OverlayTrigger>
           </Row>
         )
-      }
-      return (
-        <Row key={"card"+index}>
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip(card)}
-          >
-            <span className="ellipsis default">{quantity}x {cardName}</span>
-          </OverlayTrigger>
-        </Row>
+      });
+      const categoryHeader = (
+        <Row key={"category"+key}><h5>{key + " ("+mapped.length+")"}</h5></Row>
       )
-    });
-    setDisplay(mapped);
+      formattedContent.push([categoryHeader, ...mapped, <hr/>]);
+    }
+    
+    setDisplay(formattedContent);
   }
 
   const chartColors = () => {
@@ -183,10 +259,9 @@ const Deck = ({ ...props }) => {
   }
 
   const retrieveColors = () => {
-    const clone = new Map(defaultColors);
+    const clone = new Map(DEFAULT_COLORS);
     const deck = decksInfo.cards;
 
-    //TODO: Fix double sided cards acting as the second side
     //Map cards to only store their quantity, then summate them ex: W=>1, U=>2, B=>1, R=>0, G=>0 can become WUBU
     const cardColors = deck.map((card) => card.colors).reduce((sum, current)=>sum+current).toString();
 

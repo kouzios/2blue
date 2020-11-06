@@ -81,10 +81,6 @@ const Game = ({setView, ...props}) => {
         setGraveyard(defaultGraveyard);
     }
 
-    const config = () => {//TODO: Toggleable graveyard, if removed makes board larger ; also =?
-        alert("TODO")
-    }
-
     const gameState = () => {
         if(enabledGraveyard === true) {
             return(
