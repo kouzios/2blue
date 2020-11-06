@@ -275,3 +275,8 @@ html, body {
 }
 
 /* End create a deck table */
+
+#uniqueQuantity {
+  text-decoration: underline;
+  cursor: pointer;
+}

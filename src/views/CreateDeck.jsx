@@ -23,7 +23,6 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   }, [cards]);
 
   const deleteCard = (name) => {
-    console.log(name)
     let clone = new Map([...cards]);
     clone.delete(name);
     setCards(clone);
@@ -57,17 +56,17 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
           </OverlayTrigger>
         </div>
       )
-  }
+    }
 
-  return (
-    <OverlayTrigger
-      placement="right"
-      delay={{ show: 250, hide: 400 }}
-      overlay={renderTooltip(cardName)}
-    >
-      <span className="ellipsis default">{cardName}</span>
-    </OverlayTrigger>
-  )
+    return (
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderTooltip(cardName)}
+      >
+        <span className="ellipsis default">{cardName}</span>
+      </OverlayTrigger>
+    )
   }
 
   const CardRow = (name, quantity, index) => (
@@ -91,7 +90,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
 
   const addCard = async () => {
     setAddCardMessage("");
-    const cardName = currentCard.name;
+    let cardName = currentCard.name;
+    cardName = cardName.trim();
     if (cardName && currentCard.quantity > 0) {
       const res = await fetch(
         "/api/cards?title=" + cardName.toLowerCase(),

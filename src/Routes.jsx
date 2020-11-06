@@ -52,10 +52,12 @@ const Routes = () => {
   // Sorting (type, cmc, color)
   // Change mode b/w text (default) and images (like in real life, stacked) (sorted by cmc?)
   //add deck creation time and have "recent" sort by that time
-  //problem with dual side lands, color but also like type. It gives second side, u want first side
+    //Also have decklists sort by that, but also allow other sorting and also max per page and all that
   //dont let users use home icon to redirect to Home while logged out in Welcome page
   //Fix mobile not logging u in just looping google sign in
   //TODO: Strip starting and ending spaces in a card name cuz json
+  //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
+  
 
 
   const openDecklist = (id) => {
