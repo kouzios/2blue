@@ -201,22 +201,24 @@ const Deck = ({ ...props }) => {
           const faces = cardName.split("//");
           return (
             <Row key={"card"+index+key}>
-              <span>{quantity}x</span>
-              <OverlayTrigger
-                placement="right"
-                delay={{ show: 250, hide: 400 }}
-                overlay={renderTooltip(card, false)}
-              >
-                <span className="pl-1 ellipsis default">{faces[0]}</span>
-              </OverlayTrigger>
-              <span className="pl-1">//</span>
-              <OverlayTrigger
-                placement="right"
-                delay={{ show: 250, hide: 400 }}
-                overlay={renderTooltip(card, true)}
-              >
-                <span className="pl-1 ellipsis default">{faces[1]}</span>
-              </OverlayTrigger>
+              <span className="ellipsis">
+                {quantity}x
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltip(card, false)}
+                >
+                  <span className="pl-1 default">{faces[0]}</span>
+                </OverlayTrigger>
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltip(card, true)}
+                >
+                  <span className="pl-1 default flip">(Flip)</span>
+                </OverlayTrigger>
+              </span>
+             
             </Row>
           )
         }
@@ -382,17 +384,17 @@ const Deck = ({ ...props }) => {
           </Col>
       </Row>
       <Row id="overlay" className="h-100 justify-content-around align-items-center">
-        <Col id="cards" md="8" className="opacity-layer pb-2">
+        <Col id="stats" md="8" className="opacity-layer pb-2">
             <Row><h3>Stats</h3></Row>
             {stats}
         </Col>
       </Row>
       <Row id="overlay" className="h-100 justify-content-around align-items-center">
-        <Col id="cards" md="4" className="opacity-layer pb-2">
+        <Col id="cards" md="7" className="opacity-layer pb-2">
             <Row><h3>Cards</h3></Row>
             {display}
         </Col>
-        <Col id="chart" md="2" className="opacity-layer pb-2">
+        <Col id="chart" md="3"className="opacity-layer pb-2">
           <Row>
             <canvas id="colorChart" width="5" height="5"/>
           </Row>

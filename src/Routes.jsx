@@ -58,6 +58,7 @@ const Routes = () => {
   //TODO: Strip starting and ending spaces in a card name cuz json
   //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
   //TODO: CMC chart stacked based on color of the card in the cmc
+  //Cards column break into two seperate columns but of the same data set somehow?
   
 
 

@@ -280,3 +280,30 @@ html, body {
   text-decoration: underline;
   cursor: pointer;
 }
+
+@media only screen and (max-device-width: 420px) {
+  #overlay #cards { 
+    -webkit-column-gap: 20px;
+        -moz-column-gap: 20px;
+            column-gap: 20px;
+    -webkit-column-count: 1 !important;
+        -moz-column-count: 1 !important;
+            column-count: 1 !important;
+  }
+}
+
+#overlay #cards {
+  -webkit-column-gap: 20px;
+      -moz-column-gap: 20px;
+          column-gap: 20px;
+  -webkit-column-count: 2;
+      -moz-column-count: 2;
+          column-count: 2;
+}
+
+
+
+.flip {
+  color: lightgrey;
+  font-size: 12px;
+}
