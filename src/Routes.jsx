@@ -55,10 +55,8 @@ const Routes = () => {
     //Also have decklists sort by that, but also allow other sorting and also max per page and all that
   //dont let users use home icon to redirect to Home while logged out in Welcome page
   //Fix mobile not logging u in just looping google sign in
-  //TODO: Strip starting and ending spaces in a card name cuz json
   //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
   //TODO: CMC chart stacked based on color of the card in the cmc
-  //Cards column break into two seperate columns but of the same data set somehow?
   
 
 
@@ -76,6 +74,11 @@ const Routes = () => {
     if(!view) {
       window.history.pushState("", "", '/loading');
       return <Loading/>;
+    }
+
+    if(signedIn === false) {
+      window.history.pushState("", "", '/welcome');
+      return <Welcome />;
     }
 
     if(view === "loading") {
