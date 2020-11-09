@@ -42,10 +42,6 @@ const Routes = () => {
   //on any 401, send back to Welcome
   //add something else to hero page, something under maybe?
   //in start game import your own deck for various usages? (Tutoring for example)
-  //Make add card immediately add, then remove if not valid?
-  //hover card to see larger in Game
-  //Set up img flipping for dual-face cards
-  //Implement Config in Game
   //store saved cards in Game via cookie to allow refresh-saving
   //change alert error handling to state-based
   //decklists:
@@ -53,7 +49,6 @@ const Routes = () => {
   // Change mode b/w text (default) and images (like in real life, stacked) (sorted by cmc?)
   //add deck creation time and have "recent" sort by that time
     //Also have decklists sort by that, but also allow other sorting and also max per page and all that
-  //dont let users use home icon to redirect to Home while logged out in Welcome page
   //Fix mobile not logging u in just looping google sign in
   //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
   //TODO: CMC chart stacked based on color of the card in the cmc

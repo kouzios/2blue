@@ -90,6 +90,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
 
   const addCard = async () => {
     setAddCardMessage("");
+    setCurrentCard(CURRENT_CARD_DEFAULT);
+
     let cardName = currentCard.name;
     cardName = cardName.trim();
     if (cardName && currentCard.quantity > 0) {
@@ -104,7 +106,6 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
         cardInfo.quantity = currentCard.quantity;
         clone.set(cardInfo.name, cardInfo);
         setCards(clone);
-        setCurrentCard(CURRENT_CARD_DEFAULT);
       } else {
         setAddCardMessage("Card not found");
       }

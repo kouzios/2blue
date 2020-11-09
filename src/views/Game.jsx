@@ -14,8 +14,20 @@ const Game = ({ setView, ...props }) => {
   const [displayGraveyard, setDisplayGraveyard] = useState(null);
   const [enabledGraveyard, setEnabledGraveyard] = useState(true);
 
+  useEffect(()=>{
+    if(!window.localStorage.getItem('board'))
+      window.localStorage.setItem('board', JSON.stringify([]));
+    if(!window.localStorage.getItem('graveyard'))
+      window.localStorage.setItem('graveyard', JSON.stringify([]));
+    const savedBoard = JSON.parse(window.localStorage.getItem('board'));
+    const savedGraveyard = JSON.parse(window.localStorage.getItem('graveyard'));
+    setBoard(new Set(savedBoard));
+    setGraveyard(new Set(savedGraveyard));
+  }, [])
+
   useEffect(() => {
     let clone = [...board];
+    window.localStorage.setItem('board', JSON.stringify(clone));
     const location = "board";
     clone = clone.map((card, index) => (
       <MTGCard
@@ -30,6 +42,7 @@ const Game = ({ setView, ...props }) => {
 
   useEffect(() => {
     let clone = [...graveyard];
+    window.localStorage.setItem('graveyard', JSON.stringify(clone));
     const location = "graveyard";
     clone = clone.map((card, index) => (
       <MTGCard
