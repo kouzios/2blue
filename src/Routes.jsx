@@ -38,11 +38,11 @@ const Routes = () => {
   }
 
   //TODO: Big tasks before using link in job applications
+  //lazy load and stuff
   //maybe localstorage signin, then replace it when google gets back to us? "you've been logged out" screen if local = in, google = out
   //on any 401, send back to Welcome
   //add something else to hero page, something under maybe?
   //in start game import your own deck for various usages? (Tutoring for example)
-  //store saved cards in Game via cookie to allow refresh-saving
   //change alert error handling to state-based
   //decklists:
   // Sorting (type, cmc, color)
@@ -52,6 +52,7 @@ const Routes = () => {
   //Fix mobile not logging u in just looping google sign in
   //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
   //TODO: CMC chart stacked based on color of the card in the cmc
+  //create deck EDH validation (commander and also 100 cards, can also check if the card is valid?)
   
 
 

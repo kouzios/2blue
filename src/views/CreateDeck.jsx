@@ -4,7 +4,7 @@ import { IDContext } from "../scripts/id-context";
 import MTGCardOverlay from '../components/MTGCardOverlay';
 
 
-const CURRENT_CARD_DEFAULT = { name: "", quantity: "1" };
+const CURRENT_CARD_DEFAULT = { name: "", quantity: "1", commander: false };
 const CARDS_DEFAULT = new Map();
 
 const CreateDeck = ({ openDecklist,  ...props }) => {
@@ -16,11 +16,21 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   const [name, setName] = useState("");
   const [addCardMessage, setAddCardMessage] = useState("");
   const [deckNameMessage, setDeckNameMessage] = useState("");
+  const [commanderChecked, setCommanderChecked] = useState(false);
 
   useEffect(() => {
     setDisplayCards(cardsToPlaintext());
     //eslint-disable-next-line
   }, [cards]);
+
+  useEffect(() => {
+    setCurrentCard({
+      name: currentCard.name,
+      quantity: currentCard.quantity,
+      commander: commanderChecked,
+    });
+    //eslint-disable-next-line
+  }, [commanderChecked])
 
   const deleteCard = (name) => {
     let clone = new Map([...cards]);
@@ -69,32 +79,38 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
     )
   }
 
-  const CardRow = (name, quantity, index) => (
+  const CardRow = (name, quantity, commander, index) => (
     <Row key={quantity + name + index}>
-      <Col md="2" sm="4" xs="4">
+      <Col md="2" sm="3" xs="3">
         <Button variant="danger" onClick={() => deleteCard(name)}>
           DELETE
         </Button>
       </Col>
-      <Col className="ellipsis quantity" md="1" sm="4" xs="4">
+      <Col className="ellipsis quantity" md="1" sm="3" xs="3">
         {quantity}
       </Col>
-      <Col className="ellipsis name" md="9" sm="4" xs="4">
+      <Col className="ellipsis name" md="6" sm="3" xs="6">
 				{card(name, index)}
 			</Col>
+      <Col className="ellipsis" md="2" sm="3" xs="2">
+        {commander.toString()}
+      </Col>
     </Row>
   );
 
   const cardsToPlaintext = () =>
-    [...cards].map((card, index) => CardRow(card[0], card[1].quantity, index));
+    [...cards].map((card, index) => CardRow(card[0], card[1].quantity, card[1].commander, index));
 
   const addCard = async () => {
+    const card = {...currentCard};
+
     setAddCardMessage("");
     setCurrentCard(CURRENT_CARD_DEFAULT);
+    setCommanderChecked(false);
 
-    let cardName = currentCard.name;
+    let cardName = card.name;
     cardName = cardName.trim();
-    if (cardName && currentCard.quantity > 0) {
+    if (cardName && card.quantity > 0) {
       const res = await fetch(
         "/api/cards?title=" + cardName.toLowerCase(),
         { method: "POST" }
@@ -102,8 +118,13 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       let cardInfo = await res.json();
 
       if (cardInfo.name) {
+        if(cardInfo.legalities.commander !== "Legal") {//TODO: Variable format based on Deck Type
+          setAddCardMessage("That card is not legal in the EDH format")
+          return;
+        }
         let clone = new Map([...cards]);
-        cardInfo.quantity = currentCard.quantity;
+        cardInfo.quantity = card.quantity;
+        cardInfo.commander = card.commander;
         clone.set(cardInfo.name, cardInfo);
         setCards(clone);
       } else {
@@ -120,7 +141,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
     setDeckNameMessage("");
     const cardsArray = Array.from(cards); //Map to array
     let clone = cardsArray.map((card) => (card[1])); //Map format to normal formatting
-    const body = { name, cards: clone, type };
+    console.log(clone)
+    const body = { name, cards: clone, type:'EDH' };//Only allowing EDH right now
     if (name === "") {
       setDeckNameMessage("Please fill in deck name");
       return;
@@ -155,6 +177,9 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                 placeholder="Enter deck name"
                 autoComplete="off"
               />
+              <Form.Text id="cardHelpBlock" muted>
+                EDH decks require a commander, so be sure to check the "commander" box on that card. For now, we don't validate if the commander is valid, or if they are split commanders.
+              </Form.Text>
             </Form.Group>
             <Form.Group as={Col} md={2} controlId="formDeckType">
               <Form.Label>Deck Type</Form.Label>
@@ -162,6 +187,7 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                 as="select"
                 onChange={(e) => setType(e.target.value)}
                 value={type}
+                disabled
               >
                 <option>EDH</option>
                 <option>Brawl</option>
@@ -183,7 +209,7 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
           <hr />
 
           <Form.Row>
-            <Form.Group as={Col} md={10} controlId="formCardname">
+            <Form.Group as={Col} controlId="formCardname">
               <Form.Label>Card Name</Form.Label>
               <Form.Control
                 type="text"
@@ -192,6 +218,7 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                   setCurrentCard({
                     name: e.target.value,
                     quantity: currentCard.quantity,
+                    commander: currentCard.commander,
                   })
                 }
                 value={currentCard.name}
@@ -211,9 +238,18 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                   setCurrentCard({
                     name: currentCard.name,
                     quantity: e.target.value,
+                    commander: currentCard.commander,
                   })
                 }
                 value={currentCard.quantity}
+              />
+            </Form.Group>
+            <Form.Group as={Col} md={1} controlId="formCommander">
+              <Form.Label>Commander?</Form.Label>
+              <Form.Check
+                name="Commander"
+                checked={commanderChecked}
+                onChange={(e)=>setCommanderChecked(e.target.checked)}
               />
             </Form.Group>
           </Form.Row>
@@ -237,9 +273,10 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
             <div id="displayContainer">
               <div id="displayHeader">
                 <Row className="embolden">
-                  <Col md="2" sm="4" xs="4">Action</Col>
-                  <Col md="1" sm="4" xs="4">#</Col>
-                  <Col md="9" sm="4" xs="4">Card Name</Col>
+                  <Col md="2" sm="3" xs="2">Action</Col>
+                  <Col md="1" sm="3" xs="1">#</Col>
+                  <Col md="6" sm="3" xs="6">Card Name</Col>
+                  <Col md="2" sm="3" xs="2">Commander?</Col>
                 </Row>
               </div>
 
