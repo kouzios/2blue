@@ -53,6 +53,8 @@ const Routes = () => {
   //Decklist chart goes into the ether realm on screen resize, so resummon that when that occurs
   //TODO: CMC chart stacked based on color of the card in the cmc
   //create deck EDH validation (commander and also 100 cards, can also check if the card is valid?)
+  //I think average cmc is calculated incorrectly?
+  //add commander to decklist
   
 
 

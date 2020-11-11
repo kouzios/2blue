@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useContext} from 'react';
 import MTGCardOverlay from '../components/MTGCardOverlay';
+import MTGCard from '../components/MTGCard';
 import { IDContext } from '../scripts/id-context';
 import { Container, Tooltip, Col, Row, OverlayTrigger } from 'react-bootstrap';
 var Chart = require('chart.js');
@@ -57,6 +58,7 @@ const Deck = ({ ...props }) => {
   const [stats, setStats] = useState(null);
   const [cardsByType, setCardsByType] = useState(DEFAULT_CARDS_BY_TYPE);
   const [convertedManaCost, setConvertedManaCost] = useState(DEFAULT_CMC);
+  const [commander, setCommander] = useState("");
 
 
   useEffect(() => {
@@ -72,6 +74,7 @@ const Deck = ({ ...props }) => {
       retrieveColors();
       retrieveStats();
       retrieveCMC();
+      retrieveCommander();
     } else {
       setDisplay(noDecks);
     }
@@ -229,7 +232,7 @@ const Deck = ({ ...props }) => {
               delay={{ show: 250, hide: 400 }}
               overlay={renderTooltip(card)}
             >
-              <span className="ellipsis default">{quantity}x {cardName} commander:{card.commander+""}</span>
+              <span className="ellipsis default">{quantity}x {cardName}</span>
             </OverlayTrigger>
           </Row>
         )
@@ -241,6 +244,16 @@ const Deck = ({ ...props }) => {
     }
     
     setDisplay(formattedContent);
+  }
+  
+  const retrieveCommander = () => {//TODO: Support multiple commanders
+    const deck = decksInfo.cards;
+
+    //Map cards to only store their commandernessity
+    const commanders = deck.filter((card) => card.commander === true);
+    const commander = commanders.length > 0 ? commanders[0].name : "";
+
+    setCommander(commander);
   }
 
   const chartColors = () => {
@@ -259,6 +272,14 @@ const Deck = ({ ...props }) => {
       chart.labels.push(key)
       chart.colorValues.push(colorLabels[key]);
     }
+
+    if(chart.data.length === 0) {
+      chart.data = [0]
+      chart.colorValues = ['rgba(255, 255, 255, 1)'];
+      chart.labels = ["No Colors"];//TODO: Count colorless too
+    }
+
+    console.log(chart)
 
     new Chart(ctx, {
       type: 'pie',
@@ -394,16 +415,19 @@ const Deck = ({ ...props }) => {
             <Row><h3>Cards</h3></Row>
             {display}
         </Col>
-        <Col id="chart" md="3"className="opacity-layer pb-2">
-          <Row>
-            <canvas id="colorChart" width="5" height="5"/>
-          </Row>
-          <hr/>
-          <Row>
-            <canvas id="CMCchart" width="5" height="5"/>
-          </Row>
+        <Col md="3" className="opacity-layer pb-2">
+          <Row><h3>Command Zone</h3></Row>
+          <Row className="justify-content-center"><MTGCard title={commander}/></Row>
         </Col>
       </Row>
+      <Row id="chart" className="opacity-layer pb-2">
+          <Col md="5">
+            <canvas id="colorChart"/>
+          </Col>
+          <Col md="5">
+            <canvas id="CMCchart"/>
+          </Col>
+        </Row>
     </Container>
   );
 }

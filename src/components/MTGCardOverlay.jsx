@@ -14,8 +14,9 @@ const MTGCardOverlay = ({removeCard, title, ...props}) => {
       const res = await fetch('/api/cards?title=' + title);
       const status = res.status;
       if(status !== 200) { //Delete card if invalid
+        if(removeCard)//Only do so if our parent accepts card removal
           removeCard(status);
-          return;
+        return;
       }
       const img = await res.json()
       setFirstSide(img[0]);

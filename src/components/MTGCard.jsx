@@ -10,13 +10,14 @@ const MTGCard = ({removeCard, title, ...props}) => {
     useEffect(() => {
         getCard();
         //eslint-disable-next-line
-    }, [])
+    }, [title])
 
     const getCard = async () => {        
         const res = await fetch('/api/cards?title=' + title);
         const status = res.status;
         if(status !== 200) { //Delete card if invalid
-            removeCard(status);
+            if(removeCard)//Only do so if our parent accepts card removal
+              removeCard(status);
             return;
         }
         const img = await res.json()
@@ -37,7 +38,7 @@ const MTGCard = ({removeCard, title, ...props}) => {
     return(
         <Card className="mtg">
           <OverlayTrigger
-            placement="right"
+            placement="auto"
             delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip(title, flipped)}
           >
@@ -47,7 +48,7 @@ const MTGCard = ({removeCard, title, ...props}) => {
             }
 				</OverlayTrigger>
             
-        <Button className="delete" variant="danger" onClick={removeCard}>X</Button>
+        {removeCard ? <Button className="delete" variant="danger" onClick={removeCard}>X</Button> : null}
         {flipped !== null ? 
           <Button className="flipped" variant="secondary" onClick={()=>setFlipped(oldFlipped=>!oldFlipped)}>F</Button> :
           null
