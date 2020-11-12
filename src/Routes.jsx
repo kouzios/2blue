@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import Welcome from './views/Welcome';
 import Loading from './views/Loading';
 import Game from './views/Game';
+import Import from './views/Import';
 
 
 const Routes = () => {
@@ -99,6 +100,7 @@ const Routes = () => {
       case "create": return <CreateDeck openDecklist={openDecklist} setView={setView}/>;
       case "profile": return <Profile setView={setView}/>;
       case "game": return <Game setView={setView}/>
+      case "import": return <Import setView={setView}/>
       default: return HomeComponent();
     }
   }

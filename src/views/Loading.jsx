@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-const Profile = ({...props}) => { 
+const Loading = ({...props}) => { 
   return (
     <div>
       <div className="row h-100 justify-content-around align-items-center">
@@ -14,4 +14,4 @@ const Profile = ({...props}) => {
   );
 }
 
-export default Profile;
+export default Loading;

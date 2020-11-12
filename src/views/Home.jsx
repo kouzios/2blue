@@ -14,7 +14,12 @@ const Profile = ({openDecklist, setView, ...props}) => {
           <Row className="mb-2"><span>{gameText}</span></Row>
         </Col>
         <Col md="4" className="opacity-layer no-flex">
-          <Row><h3 className="clickable" onClick={() => setView("create")}>Create a deck</h3></Row>
+          <Row>
+            <h3 className="clickable" onClick={() => setView("create")}>Create</h3>
+            <h3 className="muted">&nbsp;/&nbsp;</h3>
+            <h3 className="clickable" onClick={() => setView("import")}>Import</h3>
+            <h3 className="muted">&nbsp;a deck</h3>
+          </Row>
           <hr/>
           <Row><span>Recent Decks:</span></Row>
           <LimitedDecks openDecklist={openDecklist} total="5"/>

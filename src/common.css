@@ -24,6 +24,10 @@ html, body {
   flex-grow: 0 !important;
 }
 
+.muted {
+  color: rgb(172, 187, 206) !important;
+}
+
 .banner-logo {
   max-width: 125px;
   max-height: 40px;

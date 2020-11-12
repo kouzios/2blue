@@ -10,7 +10,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     const [userID, setUserID] = useContext(IDContext);
     const [profileInfo, setProfileInfo] = useContext(ProfileContext);
     const [signedIn, setSignedIn] = useContext(SignedinContext);
-    const [initialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
+    const [initialPath, setInitialPath] = useState((document.location.pathname).slice(1) === "loading" ? "welcome" : (document.location.pathname).slice(1));
     const [initialID] = useState(window.location.search);
     const [timer, setTimer] = useState(null);
 
@@ -51,6 +51,7 @@ const Header = ({setView, setSignedInView, ...props}) => {
     function signOut() {
         let auth2 = window.gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
+            setInitialPath("home");
             setSignedIn(false);
             initiateSigninButton();
         });
