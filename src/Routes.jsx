@@ -57,6 +57,7 @@ const Routes = () => {
   //I think average cmc is calculated incorrectly?
   //add commander to decklist
   //edit decks
+  //Maybe dont have commanders show up in decklist outside of command zone?
   
 
 
