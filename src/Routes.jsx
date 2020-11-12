@@ -99,8 +99,8 @@ const Routes = () => {
       case "decklist": return <Decklist id={deckID} setView={setView}/>;
       case "create": return <CreateDeck openDecklist={openDecklist} setView={setView}/>;
       case "profile": return <Profile setView={setView}/>;
-      case "game": return <Game setView={setView}/>
-      case "import": return <Import setView={setView}/>
+      case "game": return <Game setView={setView}/>;
+      case "import": return <Import setView={setView}/>;
       default: return HomeComponent();
     }
   }

@@ -147,6 +147,10 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       setDeckNameMessage("Please fill in deck name");
       return;
     }
+    if(cards.length === 0) {
+      setDeckNameMessage("Please add at least one card to your deck");
+      return;
+    }
     const res = await fetch("/api/decks?authID=" + userID, {
       method: "POST",
       body: JSON.stringify(body),

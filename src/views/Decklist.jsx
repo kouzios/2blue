@@ -279,8 +279,6 @@ const Deck = ({ ...props }) => {
       chart.labels = ["No Colors"];//TODO: Count colorless too
     }
 
-    console.log(chart)
-
     new Chart(ctx, {
       type: 'pie',
       data: {
