@@ -151,12 +151,23 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       setDeckNameMessage("Please add at least one card to your deck");
       return;
     }
-    const res = await fetch("/api/decks?authID=" + userID, {
+    const res = await fetch("/api/decks?type=new&authID=" + userID, {
       method: "POST",
       body: JSON.stringify(body),
     });
     const data = await res.json();
     const id = data[0].id;
+
+    if(res.status !== 200) {
+      setDeckNameMessage("Unknown server error occured");
+      return;
+    }
+
+    if(id) {
+      setDeckNameMessage("Issue creating deck, cannot retrieve deck id");
+      return;
+    }
+
     openDecklist(id);
   };
 

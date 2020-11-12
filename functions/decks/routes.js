@@ -1,13 +1,14 @@
 const getAll  =  require('./_operations/getAll');
 const getOne = require('./_operations/getOne');
 const add = require('./_operations/add');
+const importation = require('./_operations/import');
 const update = require('./_operations/update');
 const del = require('./_operations/delete');
 const formattedReturn = require('../_config/formattedReturn');
 const verify = require('../_config/verify');
 // const { endpointUrl } = require('airtable');
 
-module.exports = async (event, table) => {
+module.exports = async (event, table, cards) => {
   const param = event.queryStringParameters;
   const userID = await verify(param.authID);
   if(!userID) {
@@ -23,7 +24,13 @@ module.exports = async (event, table) => {
       return formattedReturn(405, {});
     }
   } else if (event.httpMethod === 'POST') {
-    return await add(event, table, userID);
+    if(param.type === 'new') {
+      return await add(event, table, userID);
+    } else if(param.type === 'import') {
+      return await importation(event, table, userID, cards);
+    } else {
+      return formattedReturn(405, {});
+    }
   } else if (event.httpMethod === 'PUT') {
     return await update(event, table);
   } else if (event.httpMethod === 'DELETE') {

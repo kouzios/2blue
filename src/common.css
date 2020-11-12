@@ -311,3 +311,7 @@ html, body {
   color: lightgrey;
   font-size: 12px;
 }
+
+.modal #import {
+  min-height: 400px;
+}

@@ -56,6 +56,7 @@ const Routes = () => {
   //create deck EDH validation (commander and also 100 cards, can also check if the card is valid?)
   //I think average cmc is calculated incorrectly?
   //add commander to decklist
+  //edit decks
   
 
 
@@ -100,7 +101,7 @@ const Routes = () => {
       case "create": return <CreateDeck openDecklist={openDecklist} setView={setView}/>;
       case "profile": return <Profile setView={setView}/>;
       case "game": return <Game setView={setView}/>;
-      case "import": return <Import setView={setView}/>;
+      case "import": return <Import openDecklist={openDecklist} setView={setView}/>;
       default: return HomeComponent();
     }
   }
