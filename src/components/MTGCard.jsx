@@ -36,15 +36,15 @@ const MTGCard = ({removeCard, title, ...props}) => {
       )
 
     return(
-        <Card className="mtg">
+        <Card className={props.commander ? "commander" : "mtg"}>
           <OverlayTrigger
             placement="auto"
             delay={{ show: 250, hide: 400 }}
 						overlay={renderTooltip(title, flipped)}
           >
 						{flipped === true ? 
-                <img className="mtg" src={secondSide} alt={title}/> : 
-                <img className="mtg" src={firstSide} alt={title}/>
+                <img className={props.commander ? "commander" : "mtg"} src={secondSide} alt={title}/> : 
+                <img className={props.commander ? "commander" : "mtg"} src={firstSide} alt={title}/>
             }
 				</OverlayTrigger>
             

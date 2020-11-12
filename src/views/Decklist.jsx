@@ -203,7 +203,7 @@ const Deck = ({ ...props }) => {
         if(cardName.includes("//")) { //If two faced card, separate the card names for overlay
           const faces = cardName.split("//");
           return (
-            <Row key={"card"+index+key}>
+            <Row className="decklist-card" key={"card"+index+key}>
               <span className="ellipsis">
                 {quantity}x
                 <OverlayTrigger
@@ -226,7 +226,7 @@ const Deck = ({ ...props }) => {
           )
         }
         return (
-          <Row key={"card"+index+key}>
+          <Row className="decklist-card"  key={"card"+index+key}>
             <OverlayTrigger
               placement="right"
               delay={{ show: 250, hide: 400 }}
@@ -415,7 +415,7 @@ const Deck = ({ ...props }) => {
         </Col>
         <Col md="3" className="opacity-layer pb-2">
           <Row><h3>Command Zone</h3></Row>
-          <Row className="justify-content-center"><MTGCard title={commander}/></Row>
+          <Row className="justify-content-center"><MTGCard commander={true} title={commander}/></Row>
         </Col>
       </Row>
       <Row id="chart" className="opacity-layer pb-2">

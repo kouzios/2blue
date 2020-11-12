@@ -220,6 +220,11 @@ html, body {
   background-color:transparent !important;
 }
 
+.commander {
+  width: 292px !important;
+  height: 408px  !important;
+}
+
 .mtg {
   width: 146px !important;
   height: 204px  !important;
@@ -314,4 +319,10 @@ html, body {
 
 .modal #import {
   min-height: 400px;
+}
+
+.decklist-card {
+  font-size: 14px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
