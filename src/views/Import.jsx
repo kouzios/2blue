@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { IDContext } from "../scripts/id-context";
 import { Button, Row, Col, Container, Modal, InputGroup, FormControl } from 'react-bootstrap';
+import errorHandling from '../scripts/errorHandling';
 
 const Import = ({setView, openDecklist, ...props}) => { 
   const [userID] = useContext(IDContext);
@@ -41,6 +42,7 @@ const Import = ({setView, openDecklist, ...props}) => {
     }
     
     if(res.status !== 200) {
+      errorHandling(res);
       setMessage("Unknown server error occured");
       return;
     }

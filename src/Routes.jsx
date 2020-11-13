@@ -14,7 +14,7 @@ import Import from './views/Import';
 
 
 const Routes = () => {
-  const [signedIn] = useContext(SignedinContext);
+  const [signedIn, setSignedIn] = useContext(SignedinContext);
   const [view, setView] = useState(null);
   const [deckID, setDeckID] = useState(null);
   const [route, setRoute] = useState(null);
@@ -58,6 +58,7 @@ const Routes = () => {
   //add commander to decklist
   //edit decks
   //Maybe dont have commanders show up in decklist outside of command zone?
+  //make custom fetch that automatically error handles, instead of requiring it manually after every call
   
 
 
@@ -88,8 +89,8 @@ const Routes = () => {
     }
 
     if(view === "welcome" && signedIn === true) {
-      window.history.pushState("", "", '/home');
-      return HomeComponent();
+      setSignedIn(false);
+      return;
     }
   
     const params = (view === "decklist" ? window.location.search : ""); //Only want params on decklist right now

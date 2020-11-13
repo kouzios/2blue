@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import CustomPanel from "../components/CustomPanel";
 import MTGCard from "../components/MTGCard";
 import { Row, Button } from "react-bootstrap";
+import errorHandling from "../scripts/errorHandling";
 
-//TODO: Store using cookies?
 const defaultBoard = new Set();
 const defaultGraveyard = new Set();
 
@@ -14,20 +14,20 @@ const Game = ({ setView, ...props }) => {
   const [displayGraveyard, setDisplayGraveyard] = useState(null);
   const [enabledGraveyard, setEnabledGraveyard] = useState(true);
 
-  useEffect(()=>{
-    if(!window.localStorage.getItem('board'))
-      window.localStorage.setItem('board', JSON.stringify([]));
-    if(!window.localStorage.getItem('graveyard'))
-      window.localStorage.setItem('graveyard', JSON.stringify([]));
-    const savedBoard = JSON.parse(window.localStorage.getItem('board'));
-    const savedGraveyard = JSON.parse(window.localStorage.getItem('graveyard'));
+  useEffect(() => {
+    if (!window.localStorage.getItem("board"))
+      window.localStorage.setItem("board", JSON.stringify([]));
+    if (!window.localStorage.getItem("graveyard"))
+      window.localStorage.setItem("graveyard", JSON.stringify([]));
+    const savedBoard = JSON.parse(window.localStorage.getItem("board"));
+    const savedGraveyard = JSON.parse(window.localStorage.getItem("graveyard"));
     setBoard(new Set(savedBoard));
     setGraveyard(new Set(savedGraveyard));
-  }, [])
+  }, []);
 
   useEffect(() => {
     let clone = [...board];
-    window.localStorage.setItem('board', JSON.stringify(clone));
+    window.localStorage.setItem("board", JSON.stringify(clone));
     const location = "board";
     clone = clone.map((card, index) => (
       <MTGCard
@@ -42,7 +42,7 @@ const Game = ({ setView, ...props }) => {
 
   useEffect(() => {
     let clone = [...graveyard];
-    window.localStorage.setItem('graveyard', JSON.stringify(clone));
+    window.localStorage.setItem("graveyard", JSON.stringify(clone));
     const location = "graveyard";
     clone = clone.map((card, index) => (
       <MTGCard

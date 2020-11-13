@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Tooltip, OverlayTrigger, Button, Form, Col, Row } from "react-bootstrap";
+import {
+  Tooltip,
+  OverlayTrigger,
+  Button,
+  Form,
+  Col,
+  Row,
+} from "react-bootstrap";
 import { IDContext } from "../scripts/id-context";
-import MTGCardOverlay from '../components/MTGCardOverlay';
-
+import MTGCardOverlay from "../components/MTGCardOverlay";
+import errorHandling from "../scripts/errorHandling";
 
 const CURRENT_CARD_DEFAULT = { name: "", quantity: "1", commander: false };
 const CARDS_DEFAULT = new Map();
 
-const CreateDeck = ({ openDecklist,  ...props }) => {
+const CreateDeck = ({ openDecklist, ...props }) => {
   const [userID] = useContext(IDContext);
   const [cards, setCards] = useState(CARDS_DEFAULT);
   const [displayCards, setDisplayCards] = useState("");
@@ -30,22 +37,27 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       commander: commanderChecked,
     });
     //eslint-disable-next-line
-  }, [commanderChecked])
+  }, [commanderChecked]);
 
   const deleteCard = (name) => {
     let clone = new Map([...cards]);
     clone.delete(name);
     setCards(clone);
-	};
-	
-	const renderTooltip = (name, flipped) => (
+  };
+
+  const renderTooltip = (name, flipped) => (
     <Tooltip className="mtg-container">
-      <MTGCardOverlay removeCard={()=>deleteCard(name)} title={name} flipped={flipped}/>
+      <MTGCardOverlay
+        removeCard={() => deleteCard(name)}
+        title={name}
+        flipped={flipped}
+      />
     </Tooltip>
-  )
+  );
 
   const card = (cardName, index) => {
-    if(cardName.includes("//")) { //If two faced card, seperate the card names for overlay
+    if (cardName.includes("//")) {
+      //If two faced card, seperate the card names for overlay
       const faces = cardName.split("//");
       return (
         <div>
@@ -65,7 +77,7 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
             <span className="pl-1 ellipsis default">{faces[1]}</span>
           </OverlayTrigger>
         </div>
-      )
+      );
     }
 
     return (
@@ -76,8 +88,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       >
         <span className="ellipsis default">{cardName}</span>
       </OverlayTrigger>
-    )
-  }
+    );
+  };
 
   const CardRow = (name, quantity, commander, index) => (
     <Row key={quantity + name + index}>
@@ -90,8 +102,8 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
         {quantity}
       </Col>
       <Col className="ellipsis name" md="6" sm="3" xs="6">
-				{card(name, index)}
-			</Col>
+        {card(name, index)}
+      </Col>
       <Col className="ellipsis" md="2" sm="3" xs="2">
         {commander.toString()}
       </Col>
@@ -99,10 +111,12 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   );
 
   const cardsToPlaintext = () =>
-    [...cards].map((card, index) => CardRow(card[0], card[1].quantity, card[1].commander, index));
+    [...cards].map((card, index) =>
+      CardRow(card[0], card[1].quantity, card[1].commander, index)
+    );
 
   const addCard = async () => {
-    const card = {...currentCard};
+    const card = { ...currentCard };
 
     setAddCardMessage("");
     setCurrentCard(CURRENT_CARD_DEFAULT);
@@ -111,15 +125,19 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
     let cardName = card.name;
     cardName = cardName.trim();
     if (cardName && card.quantity > 0) {
-      const res = await fetch(
-        "/api/cards?title=" + cardName.toLowerCase(),
-        { method: "POST" }
-      );
+      const res = await fetch("/api/cards?title=" + cardName.toLowerCase(), {
+        method: "POST",
+      });
+      if (res.status !== 200) {
+        errorHandling(res);
+        return;
+      }
       let cardInfo = await res.json();
 
       if (cardInfo.name) {
-        if(cardInfo.legalities.commander !== "Legal") {//TODO: Variable format based on Deck Type
-          setAddCardMessage("That card is not legal in the EDH format")
+        if (cardInfo.legalities.commander !== "Legal") {
+          //TODO: Variable format based on Deck Type
+          setAddCardMessage("That card is not legal in the EDH format");
           return;
         }
         let clone = new Map([...cards]);
@@ -140,14 +158,14 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
   const createDeck = async (event) => {
     setDeckNameMessage("");
     const cardsArray = Array.from(cards); //Map to array
-    let clone = cardsArray.map((card) => (card[1])); //Map format to normal formatting
-    console.log(clone)
-    const body = { name, cards: clone, type:'EDH' };//Only allowing EDH right now
+    let clone = cardsArray.map((card) => card[1]); //Map format to normal formatting
+
+    const body = { name, cards: clone, type: "EDH" }; //Only allowing EDH right now
     if (name === "") {
       setDeckNameMessage("Please fill in deck name");
       return;
     }
-    if(cards.length === 0) {
+    if (cards.length === 0) {
       setDeckNameMessage("Please add at least one card to your deck");
       return;
     }
@@ -155,15 +173,15 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
       method: "POST",
       body: JSON.stringify(body),
     });
-    const data = await res.json();
-    const id = data[0].id;
-
-    if(res.status !== 200) {
+    if (res.status !== 200) {
+      errorHandling(res);
       setDeckNameMessage("Unknown server error occured");
       return;
     }
+    const data = await res.json();
+    const id = data[0].id;
 
-    if(id) {
+    if (!id) {
       setDeckNameMessage("Issue creating deck, cannot retrieve deck id");
       return;
     }
@@ -193,7 +211,9 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                 autoComplete="off"
               />
               <Form.Text id="cardHelpBlock" muted>
-                EDH decks require a commander, so be sure to check the "commander" box on that card. For now, we don't validate if the commander is valid, or if they are split commanders.
+                EDH decks require a commander, so be sure to check the
+                "commander" box on that card. For now, we don't validate if the
+                commander is valid, or if they are split commanders.
               </Form.Text>
             </Form.Group>
             <Form.Group as={Col} md={2} controlId="formDeckType">
@@ -240,8 +260,9 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
                 autoComplete="off"
               />
               <Form.Text id="cardHelpBlock" muted>
-                If adding a double faced card, please follow the format of: Frontname // Backname. 
-                For example, "Journey to Eternity // Atzal, Cave of Eternity"
+                If adding a double faced card, please follow the format of:
+                Frontname // Backname. For example, "Journey to Eternity //
+                Atzal, Cave of Eternity"
               </Form.Text>
             </Form.Group>
             <Form.Group as={Col} md={2} controlId="formCardnum">
@@ -264,7 +285,7 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
               <Form.Check
                 name="Commander"
                 checked={commanderChecked}
-                onChange={(e)=>setCommanderChecked(e.target.checked)}
+                onChange={(e) => setCommanderChecked(e.target.checked)}
               />
             </Form.Group>
           </Form.Row>
@@ -288,10 +309,18 @@ const CreateDeck = ({ openDecklist,  ...props }) => {
             <div id="displayContainer">
               <div id="displayHeader">
                 <Row className="embolden">
-                  <Col md="2" sm="3" xs="2">Action</Col>
-                  <Col md="1" sm="3" xs="1">#</Col>
-                  <Col md="6" sm="3" xs="6">Card Name</Col>
-                  <Col md="2" sm="3" xs="2">Commander?</Col>
+                  <Col md="2" sm="3" xs="2">
+                    Action
+                  </Col>
+                  <Col md="1" sm="3" xs="1">
+                    #
+                  </Col>
+                  <Col md="6" sm="3" xs="6">
+                    Card Name
+                  </Col>
+                  <Col md="2" sm="3" xs="2">
+                    Commander?
+                  </Col>
                 </Row>
               </div>
 
